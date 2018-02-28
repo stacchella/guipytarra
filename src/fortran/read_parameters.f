@@ -58,7 +58,7 @@ c
       print *, 'brain_dead_test     ', brain_dead_test
 c
       read(1,11) module
- 11   format(a8)
+ 11   format(a20)
       print *, 'module  = ', module
       read(1,15) mode
  15   format(a10) 

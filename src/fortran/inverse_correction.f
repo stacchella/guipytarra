@@ -70,7 +70,7 @@ c
 c     find corresponding output value by inverting the table search:
 c
       call linear_interpolation(ninterv, yy, xx, eflux, 
-     &     measured_electrons, nnn)
+     &     measured_electrons)
       inverse_correction = measured_electrons/gain_cv3 !  e- --> ADU
 c     &     print 10,i,j, eflux, altered, gain(i,j),inverse_correction,
 c     &     well_depth(i,j)*gain(i,j), well_depth(i,j)

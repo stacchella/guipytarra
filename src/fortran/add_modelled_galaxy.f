@@ -119,9 +119,8 @@ c
             end if
             call add_galaxy_component(xg, yg, mag, id(ng),
      *           ellipticity(ng, nc), re(ng,nc), rmax, 
-c     *           theta(ng, nc)-pa_degrees,
-     *           theta(ng, nc)+pa_degrees,
-     *           nsersic(ng, nc), zp, scale,
+     *           theta(ng, nc), nsersic(ng, nc), zp, scale,
+     *           pa_degrees,
      *           wavelength, bandwidth,system_transmission, 
      *           mirror_area, integration_time,seed,
      *           noiseless, psf_add, ipc_add, debug)

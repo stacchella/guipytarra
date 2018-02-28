@@ -1,4 +1,4 @@
-cgfortran proselitism.f ra_dec_to_sca.f load_osim_transforms.f ra_dec_xy_osim.f sca_coords_from_osim.f rotate_coords.f spherical_to_plane.f
+cgfortran proselytism.f ra_dec_to_sca.f load_osim_transforms.f ra_dec_xy_osim.f sca_coords_from_osim.f rotate_coords.f spherical_to_plane.f
 
       implicit none
       double precision xnircam, ynircam,x0_nircam, y0_nircam
@@ -17,7 +17,7 @@ c
       integer sca_id, verbose, indx, nstars, i,j, l, max_stars,
      *     nfilters, sca
 c
-      character catalogue*80, output_file*80
+      character catalogue*80, output_file*80, reg*80
 c
       dimension sca(10), xnircam(6,10), ynircam(6,10)
       dimension xshift(10), yshift(10), xmag(10), ymag(10), xrot(10),
@@ -29,8 +29,12 @@ c
       common /nircam/  x0_nircam,  y0_nircam,  xnircam,  ynircam, sca
       common /transform/ xshift, yshift, xmag, ymag, xrot, yrot
       common /otransform/ oxshift, oyshift, oxmag, oymag, oxrot, oyrot
-
-      data xc, yc/0.0d0, 0.0d0/
+c      data xc, yc/0.0d0, 0.0d0/
+c
+c     modified 2018-02-03 such that NIRCam centre is in V2, V3
+c     This makes coordinates compatible  with read_nircam_outline
+c
+      data xc, yc/-0.00529d0, -8.209855d0/
       data osim_scale/60.d0/ 
       q = dacos(-1.0d0)/180.d0
 c
@@ -50,12 +54,12 @@ c     this needs to be used to find the centre coordinates of each SCA
 c     relative to the NIRCam pointing position
 c
       call read_nircam_outline
- 
 c
 c     read parameters
 c     ra0, dec0 are the NIRCam footprint centre coordinates 
 c
 c      open(10,file='convert_coords.par')
+      read(5, *) nfilters
       read(5,*) ra0, dec0, pa_degrees
       read(5,*) sca_id
  10   format(a80)
@@ -64,6 +68,8 @@ c     star catalogue
 c
       read(5,10) catalogue
       read(5,10) output_file
+c
+      print *,'Proselytism : NIRCam centre position at ', ra0, dec0
 c
 c     Position of SCA centre
 c
@@ -74,12 +80,12 @@ c
       ddec = dec0 - yy/60.d0
       cosdec = dcos(ddec*q)
       rra  = ra0  - xx/60.d0/cosdec
-      print *, xx, yy, rra,ddec
+      print *, xnircam(i,6), ynircam(i,6), ra0, dec0
+      print *, xx, yy, rra, ddec
  
       open(1,file=catalogue)
       open(2,file=output_file)
       nstars = 0
-      nfilters  = 20
 c      do i = 1, max_stars
 c         read(1,110,end= 1000) indx, rra, ddec, x_osim, y_osim,
 c     *        (array(j),j=1,nfilters)
@@ -111,17 +117,21 @@ c      close(10)
 c     
       open(1,file = catalogue)
       open(2,file = output_file)
-      open(3,file = 'test_rd.reg')
-      open(4,file = 'test_xy.reg')
+      write(reg, 170) sca_id
+ 170  format('test_',i3.3,'_rd.reg')
+      open(3,file = reg)
+      write(reg, 180) sca_id
+ 180  format('test_',i3.3,'_xy.reg')
+      open(4,file = reg)
       print 10, catalogue
       read(1,*)
       nstars = 0
-      nfilters  = 20
       do i = 1, max_stars
          read(1, *, err= 1030, end=2000) l, tra, tdec, tmagnitude,
      *        tz, semi_major, semi_minor, ttheta, tnsersic,
      *        (array(j), j = 1, nfilters)
- 
+
+c         if(array(nfilters-1).gt.25.d0) go to 1090
          go to 1050
  1030      continue
          print *,'skipping '
@@ -133,22 +143,31 @@ c
  1050    call ra_dec_to_sca(sca_id, 
      *        ra0, dec0, tra, tdec, pa_degrees,
      *        xc, yc,  osim_scale, x_sca, y_sca)
-c         print 120, tra, tdec,  x_sca, y_sca
+C         print 1040, l, tra, tdec,  x_sca, y_sca
 c     
          if(x_sca.ge.xmin.and. x_sca.le. xmax .and.
      *        y_sca.ge. ymin .and.y_sca.le.ymax) then
+c            print 120, tra, tdec,  x_sca, y_sca
+            nstars = nstars + 1
             write(2, 1060) l, tra, tdec, tmagnitude,
      *        tz, semi_major, semi_minor, ttheta, tnsersic,
      *        (array(j), j = 1, nfilters), x_sca, y_sca
  1060       format(i6,100(1x,f12.6))
-            nstars = nstars + 1
-            write(3, 1070) tra, tdec !, l
- 1070       format('fk5;point(',f12.7,',',f12.7,'#point= diamond ',
-     &           'color=yellow') ! text={',i5,'}')
-
-            write(4, 1080) x_sca, y_sca !, l
- 1080       format('image;point(',f12.7,',',f12.7,'#point= cross ',
-     &           'color=red') ! text={',i5,'}')
+            if(sca_id .eq.485. or. sca_id .eq. 490) then
+               write(3, 1070) tra, tdec, array(nfilters)
+ 1070          format('fk5;point(',f12.7,',',f12.7,'#point= boxcircle ',
+     &              'color=magenta',1x,  'text={',f6.3,'}')
+               write(4, 1080) x_sca, y_sca !, l
+ 1080          format('image;point(',f12.7,',',f12.7,'#point= cross ',
+     &              'color=red') ! text={',i5,'}')
+            else
+               write(3, 1075) tra, tdec !, l
+ 1075          format('fk5;point(',f12.7,',',f12.7,'#point=box ',
+     &              'color=grey') ! text={',i5,'}')
+               write(4, 1085) x_sca, y_sca !, l
+ 1085          format('image;point(',f12.7,',',f12.7,'#point= circle ',
+     &              'color=red') ! text={',i5,'}')
+            end if
          end if
  1090    continue
       end do

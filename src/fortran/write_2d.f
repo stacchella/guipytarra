@@ -23,7 +23,7 @@ c
       logical simple,extend
       logical subarray
       integer colcornr, rowcornr, naxis1, naxis2
-      character filename*120, cunit1*8, cunit2*8, string*8
+      character filename*(*), cunit1*8, cunit2*8, string*8
 c
       parameter (nnn=2048)
 c

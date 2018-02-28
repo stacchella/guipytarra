@@ -38,7 +38,11 @@ c
       common /transform/ xshift, yshift, xmag, ymag, xrot, yrot
       common /otransform/ oxshift, oyshift, oxmag, oymag, oxrot, oyrot
 c
-      data geomaps/'CV2_nasa_transforms.dat','fake_transforms.dat'/
+c      data geomaps/'CV2_nasa_transforms.dat','fake_transforms.dat'/
+c     modified 2018-02-02:
+c     to use the NIRCam flight solution from Renee Gracey's measurements.
+c
+      data geomaps/'NIRCam_flight_transforms.dat','fake_transforms.dat'/
       data xcorner /5.d0, 2044.d0, 2044.d0,    5.d0,    5.d0/
       data ycorner /5.d0,    5.d0, 2044.d0, 2044.d0,    5.d0/
 c
@@ -55,8 +59,8 @@ c     thus
 c     osim_x  = 1.597702 arc sec; osim_y = 1.599879 arc sec (SW) 
 c     osim_x  = 1.609128 arc sec; osim_y = 1.612727 arc sec (LW)
 c
-c     However the osim unit must be the same for box detectors;
-c     assuming SW_x = SW_y = 0.0317 "/pix this implies in a scale of 
+c     However the osim unit must be the same for both detectors;
+c     assuming SW_x = SW_y = 0.0317 "/pix this implies a scale of 
 c     LW_x = 0.0643395"/pix
 c     LW_y = 0.0642838"/pix
 c     or average of 0.0643117"/pix

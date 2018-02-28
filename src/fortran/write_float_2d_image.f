@@ -11,7 +11,8 @@ c
       implicit none
       character telescop*20, instrume*20, filter*20,
      *     module*20, partname*4,comment*40, object*20      
-      real image, tframe, tgroup
+      real image
+      double precision tframe, tgroup
       integer status, bitpix, naxes, naxis, pcount, gcount, block,
      *     groupgap, group, sca_id, nframe, ngroup,
      *     nnn, job, iunit
@@ -75,7 +76,8 @@ c
 c
 c     write more header keywords
 c
-      call write_nircam_keywords(iunit,nframe, tframe, groupgap, tgroup, 
+      call write_nircam_keywords(iunit,nframe, 
+     *     real(tframe), groupgap, real(tgroup), 
      *     ngroup, object, partname, sca_id,module, filter, 
      *     subarray, colcornr, rowcornr, naxis1, naxis2, job)
 c

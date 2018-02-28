@@ -11,11 +11,14 @@ c     as add_up_the_ramp
 c     modified to make it compatible with STScI data model and ncdhas
 c     cnaw 2017-05-01
 c     Steward Observatory, University of Arizona
+c     more changes 
+c     cnaw 2018-02-26
 c     
       subroutine add_up_the_ramp(idither, ra_dithered, dec_dithered, 
      *     pa_degrees,
      *     filename, noise_name,
-     *     sca_id, module, brain_dead_test, 
+     *     sca_id,              ! x_sca, y_sca,
+     *     module, brain_dead_test, 
      *     xc, yc, pa_v3, osim_scale,scale,
      *     include_ktc, include_dark, include_readnoise, 
      *     include_reference,
@@ -24,7 +27,7 @@ c
      *     include_stars, include_galaxies, nstars, ngal,
      *     bitpix, ngroups, nframe, nskip, tframe, tgroup, object,
      *     nints,
-     *     subarray_name, colcornr, rowcornr, naxis1, naxis2,
+     *     subarray, colcornr, rowcornr, naxis1, naxis2,
      *     filter_id, wavelength, bandwidth, system_transmission,
      *     mirror_area, photplam, photflam, stmag, abmag,
      *     background, icat_f,filter_index, psf_file, 
@@ -60,11 +63,16 @@ c
 c
 c     parameters
 c
-      real tframe, tgroup
+      double precision tframe, tgroup
 c 
-      double precision
-     *     equinox, crpix1, crpix2, crval1, crval2, cdelt1,cdelt2,
-     *     cd1_1, cd1_2, cd2_1, cd2_2
+c      double precision
+c     *     equinox, crpix1, crpix2, crval1, crval2, cdelt1,cdelt2,
+c     *     cd1_1, cd1_2, cd2_1, cd2_2, cd3_2
+
+      double precision equinox, crpix1, crpix2, crpix3,
+     &     crval1, crval2, crval3, cdelt1, cdelt2,cdelt3,
+     &     pc1_1, pc1_2, pc2_1, pc2_2, pc3_1, pc3_2, cd3_3,
+     *     cd1_1, cd1_2, cd2_1, cd2_2, cd3_2
 c
       integer colcornr, rowcornr, naxis1, naxis2
 c
@@ -85,8 +93,7 @@ c
      &     noise_name*120
       character object*20, partname*5, module*1, filter_id*5
 c     
-      character subarray_name*8
-      logical subarray
+      character subarray*(*)
 c
       parameter (nnn=2048, max_nint=3, max_order=7)
 c
@@ -113,8 +120,12 @@ c
       common /well_d/ well_depth, bias, linearity,
      *     linearity_gain,  lincut, well_fact, order
 c
-      common /wcs/ equinox, crpix1, crpix2, crval1, crval2,
-     *     cdelt1,cdelt2, cd1_1, cd1_2, cd2_1, cd2_2
+      common /wcs/ equinox, 
+     *     crpix1, crpix2,      ! crpix3,
+     *     crval1, crval2,      !crval3,
+     *     cdelt1, cdelt2,      !cdelt3,
+     *     cd1_1, cd1_2, cd2_1, cd2_2,! cd3_3,
+     *     pc1_1, pc1_2, pc2_1, pc2_2 !, pc3_1, pc3_2
 c
 c     Parameters
 c
@@ -132,7 +143,7 @@ c
 c
       if(verbose.gt.0) then
          print 10,sca_id, filter_index, filter_id, idither
- 10      format('sca_image:  sca ', i4,' filter ', i4, 2x, a5,
+ 10      format('add_up_the_ramp:  sca ', i4,' filter ', i4, 2x, a5,
      *        ' dither ',i4)
       end if
       indx = sca_id - 480
@@ -144,13 +155,35 @@ c     WCS keywords; these are kept to maintain compatibility
 c     with older code while not using the ZEMAX distortion
 c     models.
 c
-      call wcs_keywords(sca_id, x_sca, y_sca, xc, yc, osim_scale,
-     *     ra_dithered, dec_dithered,  pa_degrees,verbose)
-      call osim_coords_from_sca(sca_id, x_sca, y_sca, x_osim, y_osim)
-      call sca_to_ra_dec(sca_id, 
-     *     ra_dithered, dec_dithered,
-     *     ra_sca, dec_sca, pa_degrees, 
-     *     xc, yc, osim_scale, x_sca, y_sca)
+c      print *, crpix1, crpix2, crpix3
+c      print *, crval1, crval2, crval3
+c      print *, cdelt1, cdelt2, cdelt3
+c      x_sca = 1024.5d0
+c      y_sca = 1024.5d0
+cc      call sca_to_ra_dec(sca_id, 
+cc     *     ra_dithered, dec_dithered,
+cc     *     ra_sca, dec_sca, pa_degrees, 
+cc     *     xc, yc, osim_scale, x_sca, y_sca)
+cc      print *, crpix1, crpix2, crpix3
+cc      print *, crval1, crval2, crval3
+cc      print *, cdelt1, cdelt2, cdelt3
+c      print *,'add_up_the_ramp '
+c      call wcs_keywords(
+c     *     sca_id, x_sca, y_sca, xc, yc, osim_scale,
+c     *     ra_dithered, dec_dithered,  pa_degrees,verbose)
+c      call osim_coords_from_sca(sca_id, x_sca, y_sca, x_osim, y_osim)
+c      call sca_to_ra_dec(sca_id, 
+c     *     ra_dithered, dec_dithered,
+c     *     ra_sca, dec_sca, pa_degrees, 
+c     *     xc, yc, osim_scale, x_sca, y_sca)
+      print *,'crval1, crval2', crval1, crval2
+      print *,'crpix1, crpix2', crpix1, crpix2
+      print *,'ra_dithered, dec_dithered',ra_dithered, dec_dithered
+      print *,'ra_sca, dec_sca',ra_sca, dec_sca
+      print *,'pa_degrees, osim_scale',pa_degrees, osim_scale
+      print *,'xc, yc', xc, yc
+      print *,'add_up_the_ramp crval1, crval2, crval3',
+     *     crval1, crval2, crval3
 c
 c     Read PSF
 c
@@ -165,23 +198,6 @@ c
 c
       groupgap =   nskip
       naxis    =   3
-c
-      if(subarray_name(1:4) .eq.'FULL') then
-         subarray = .false.
-      else
-         subarray = .true.
-      end if
-c
-c     set image sizes for sub-array cases
-c
-c      if(subarray .eqv. .true.) then
-c         naxes(1) = naxis1
-c         naxes(2) = naxis2
-c      else
-c         naxes(1) =  nnn
-c         naxes(2) =  nnn
-c      end if
-c      naxes(3) =  ngroups
 c     
 c     Read the cosmic ray distribution if set;
 c     The sca id is required to set the wavelength for the
@@ -237,7 +253,7 @@ c     [e-]
      *                 xc, yc, osim_scale, sca_id, filter_index, seed,
      *                 subarray, colcornr, rowcornr, naxis1, naxis2,
      *                 wavelength, bandwidth,system_transmission,
-     *                 mirror_area,dble(tframe), in_field, 
+     *                 mirror_area,tframe, in_field, 
      *                 noiseless, psf_add, ipc_add, verbose)
                   if(verbose.ge.2) then
                      print *, 'added ',in_field, ' stars of ', nstars
@@ -254,7 +270,7 @@ c     [e-]
      *                 xc, yc, osim_scale, icat_f,
      *                 ngal, scale,
      *                 wavelength, bandwidth, system_transmission, 
-     *                 mirror_area, dble(tframe), seed, in_field,
+     *                 mirror_area, tframe, seed, in_field,
      &                 noiseless, psf_add, ipc_add,verbose)
                   if(verbose.ge.2) then
                      print *, 'sca_image: added', in_field,
@@ -270,7 +286,7 @@ c
      &                 ' e-/sec/pixel'
                   call add_sky_background(background,
      *                 subarray, colcornr, rowcornr, naxis1, naxis2,
-     *                 integration_time, verbose)
+     *                 integration_time, noiseless,verbose)
                end if
 c     
 c     add cosmic rays [e-]
@@ -278,7 +294,7 @@ c
                if(include_cr .eq. 1) then 
                   call add_modelled_cosmic_rays(n_image_x, n_image_y,
      *                 cr_mode, subarray, naxis1, naxis2, 
-     *                 integration_time)
+     *                 integration_time, ipc_add, verbose)
 c     *              subarray, colcornr, rowcornr, naxis1, naxis2)
                end if
 c     
@@ -424,12 +440,13 @@ c
                latent_image(i,j) = image(i,j)
             end do
          end do
-         ibitpix = -32
-         call write_float_2d_image(latent_file, latent_image,
-     *        naxis1, naxis2,
-     *        ibitpix, nframe, tframe, nskip, tgroup, ngroups, object, 
-     *        partname, sca_id,module, filter_id,
-     *        subarray, colcornr, rowcornr,job)
+c         ibitpix = -32
+c         call write_float_2d_image(latent_file, latent_image,
+c     *        naxis1, naxis2,
+c     *        ibitpix, nframe, tframe, nskip, tgroup, ngroups, object, 
+c     *        partname, sca_id,module, filter_id,
+c     *        subarray, colcornr, rowcornr,job)
+c      print *,'crval1, crval2, crval3',crval1, crval2, crval3
       endif
       end do ! Loop over NINTS
       if(verbose.ge.1) then

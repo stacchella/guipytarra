@@ -28,7 +28,7 @@ c
 c
       dimension results(npar)
 c
-      dimension filters(mmm,nnn),filtpars(mmm,npar), filterid(mmm)
+      dimension filters(2,nnn,mmm),filtpars(mmm,npar), filterid(mmm)
       common /filter/filters, filtpars, filterid
 c     
 c     CGS units
@@ -83,8 +83,8 @@ c     find wavelength limits of filter passband (measurements in microns)
 c     
          wl0 = filtpars(index, 1)
          wlf = filtpars(index, 2)
-         dwl = filtpars(index,11)
-         wl_nominal = filtpars(index,5)
+         dwl = (wlf - wl0)/(lll)
+         wl_nominal = filtpars(index,10)
          npts = nint((wlf - wl0)/dwl)
 c
          pixel = 0.0317d0
@@ -96,11 +96,11 @@ c
          f_lambda     = 0.0d0
          f_nu         = 0.0d0
          photon_flux  = 0.0d0
-         do k = 1, npts+1
+         do k = 1, lll
             factor = 1.0d0
-            if(k.eq.1 .or.k.eq.npts+1) factor = 0.5d0
-            wavelength=wl0 + dble(k-1) * dwl
-            throughput =  filters(index, k) 
+            if(k.eq.1 .or.k.eq.npts) factor = 0.5d0
+            wavelength =  filters(1, k, index)
+            throughput =  filters(2, k, index) 
             wl_cm = wavelength * 1.d-04 ! um --> cm
 c     
 c     Zodiacal light : scattering term
@@ -136,6 +136,8 @@ c     expressed in photon flux
 c     background incident on the telescope (prior to optics)
             f_nu     = f_nu     + (bkg * wl_cm**2) / cee 
             f_lambda = f_lambda + bkg * to_si_per_micron
+c           print *, wavelength, e_photon, photons, bkg
+c           PRINT *, k,wavelength,wl_cm, denom1, denom2, t_thermal
          end do
 c
 c     this will be the total number of photo-electrons integrated
