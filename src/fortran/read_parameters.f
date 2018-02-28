@@ -8,13 +8,9 @@
      &     include_reference,
      *     include_1_over_f, include_latents, include_non_linear,
      *     include_cr, cr_mode, include_bg, bkg_mode,
-     *     zodiacal_scale_factor,
      *     include_stars, nstars, star_catalogue,
      *     include_galaxies, ngal, include_cloned_galaxies, 
      *     galaxy_catalogue,
-c     *     h0, omega_m, omega_l, omega_r, omega_nu, w, wprime,
-c     *     phistar, mstar, alpha, q_evol, p_evol, zmin, zmax,
-c     *     bright, faint, apm_bright, apm_faint, solid_angle,
      *     nf, use_filter, cat_filter)
       
       implicit none
@@ -38,10 +34,6 @@ c
       integer nstars, ngal, junk
 c
       double precision ra0, dec0, pa_degrees, dither_arc_sec
-      double precision h0, omega_m, omega_l, omega_r, omega_nu,
-     *     w, wprime
-      double precision  bright, faint, apm_bright, apm_faint, 
-     *     zmin, zmax,solid_angle
       double precision rcore_arcsec
       double precision mstar, alpha, phistar, p_evol, q_evol 
       double precision zodiacal_scale_factor, bkg
@@ -56,7 +48,7 @@ c
       print *, 'brain_dead_test     ', brain_dead_test
 c
       read(1,11) module
- 11   format(a8)
+ 11   format(a20)
       print *, 'module  = ', module
       read(1,15) mode
  15   format(a10) 
@@ -127,9 +119,9 @@ c
       read(1,10) include_bg 
       print *,'include_bg               ', include_bg
       read(1,10) bkg_mode
-      print *,'bkg_mode                 ', bkg_mode
+c      print *,'bkg_mode                 ', bkg_mode
       read(1,20) zodiacal_scale_factor
-      print *,'zodiacal_scale_factor    ',zodiacal_scale_factor
+c      print *,'zodiacal_scale_factor    ',zodiacal_scale_factor
 c
       read(1,10) include_stars
       print *, 'include_stars             ', include_stars
@@ -149,49 +141,6 @@ c
       print 50, 'read galaxy catalogue    ', galaxy_catalogue
  50   format(a30,2x,a80)
 c     
-c      read(1,20) h0
-c      print *, 'h0                      ',h0
-c      read(1,20) omega_m
-c      print *, 'omega_m                 ',omega_m
-c      read(1,20) omega_l
-c      print *, 'omega_l                 ',omega_l
-c      read(1,20) omega_r
-c      print *, 'omega_l                 ',omega_r
-c      read(1,20) omega_nu
-c      print *, 'omega_l                 ',omega_nu
-c      read(1,20) w
-c      print *, 'w                       ',w
-c      read(1,20) wprime
-c      print *, 'wprime                  ',wprime
-cc 
-c      read(1,20) phistar
-c      print *, 'phistar                 ',phistar
-c      read(1,20) mstar
-c      print *, 'mstar                   ',mstar
-c      read(1,20) alpha
-c      print *, 'alpha                   ',alpha
-c      read(1,20) q_evol
-c      print *, 'q_evol                  ',q_evol
-c      read(1,20) p_evol
-c      print *, 'p_evol                  ',p_evol
-cc
-c      read(1,20) zmin
-c      print *, 'zmin                    ',zmin
-c      read(1,20) zmax
-c      print *, 'zmax                    ',zmax
-cc
-c      read(1,20) bright
-c      print *, 'bright                  ',bright
-c      read(1,20) faint
-c      print *, 'faint                   ',faint
-c      read(1,20) apm_bright
-c      print *, 'apm_bright              ',apm_bright
-c      read(1,20) apm_faint
-c      print *, 'apm_faint               ',apm_faint
-cc
-c      read(1,20) solid_angle
-c      print *, 'solid_angle             ', solid_angle
-c
       read(1,10) nf
       print *, 'number of filters        ', nf
       do i = 1, nf

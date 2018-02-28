@@ -7,9 +7,14 @@ c
       implicit none
       double precision x, xmed, x1, x2, temp
       integer npts, i, npt,lll
-      parameter(lll=50000)
+      parameter(lll=4194304)
 c      parameter(lll=67108864)
       dimension temp(lll), x(lll)
+      if(npts.gt. lll) then
+         print *,'median: array size too large:'
+         print *,' NPTS is  ', npts,'  must be <= lll: ',lll
+         stop
+      endif
       do i = 1, npts
          temp(i) = x(i)
       end do
@@ -35,9 +40,14 @@ c
       double precision x, xmed
       real fx, fxmed
       integer npts, i, lll
-      parameter(lll=50000)
+      parameter(lll=4194304)
 c      parameter(lll=67108864)
       dimension x(lll), fx(lll)
+      if(npts.gt. lll) then
+         print *,'f  median: array size too large:'
+         print *,' NPTS is  ', npts,'  must be <= lll: ',lll
+         stop
+      endif
       do i = 1, npts
          x(i) = dble(x(i))
       end do

@@ -3,7 +3,7 @@ c
       subroutine make_fake_cat(
      &     npts, id, ra, dec, hmag, hmag_err, 
      &     semi_major, semi_major_err, semi_minor, semi_minor_err,
-     &     n_sersic, n_sersic_err, pa, pa_err, z, nnn)
+     &     n_sersic, n_sersic_err, pa, pa_err, z, nfilters, nnn)
       
       implicit none
       integer npts, id, nnn
@@ -42,7 +42,7 @@ c      common /galaxy/ra, dec, z, magnitude, nsersic, ellipticity, re,
 c     *     theta, flux_ratio, ncomponents
 c
       q = dacos(-1.0d0)/180.d0
-      nfilters = 20
+c      nfilters = 20
 c
       do j = 1, nfilters
          label(j) = j
@@ -58,8 +58,10 @@ c
       open(2,file='fake_mag_cat.reg')
 
       do i = 1, npts
+         if(id(i).eq.0) go to 90
          tra         = ra(i)
          tdec        = dec(i)
+         tz          = z(i)
          tsemi_major = semi_major(i)
          tsemi_minor = semi_minor(i)
          ttheta      = pa(i)
@@ -94,6 +96,9 @@ c     *     abmag, nfilters)
 c     magnitude(ngal,j)   = abmag(j) !
          end do
 
+c         write(*, 80) id(i), tra, tdec, tmagnitude,
+c     *        tz, tsemi_major, tsemi_minor, ttheta, tnsersic,
+c     *        (magnitude(j), j = 1, nfilters)
          write(42, 80) id(i), tra, tdec, tmagnitude,
      *        tz, tsemi_major, tsemi_minor, ttheta, tnsersic,
      *        (magnitude(j), j = 1, nfilters)

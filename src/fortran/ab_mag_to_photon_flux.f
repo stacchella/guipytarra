@@ -9,7 +9,7 @@ c
 c     output 
 c     photon_flux in number of photo-electrons per second per micron
 c     (this is because the filter transmission already contains the
-c     qunatum efficiency
+c     quantum efficiency
 c     
 c     convert magnitudes into F_nu in Jy
 c     f_nu  = 10.d0**(0.40d0*(8.90d0 - mag))
@@ -34,7 +34,7 @@ c
       implicit none
       double precision bandwidth, wavelength, system_transmission,
      *     dlam_over_lam, f_nu, sim_nicmos, hplanck, photon_flux,
-     *     photon_flux_per_unit_area
+     *     photon_flux_per_unit_area, sim_flux
       double precision mag, mirror_area, integration_time
 c
       hplanck   = 6.62606957d-27     ! erg s 
@@ -56,12 +56,20 @@ c
       ab_mag_to_photon_flux = photon_flux
 c
 c      print 10,  wavelength, mag, f_nu, photon_flux
- 10   format('ab_mag_to_photon_flux: wl, mag,f_nu, photons',
+ 10   format('ab_mag_to_photon_flux: wl, mag,f_nu, photons/s',
      *     1x, f9.3, 1x, f8.3,1x,1pe11.5,1x,1pe11.5)
+c
+c     units for NICMOS simulator is photons/cm2/s/A but note that
+c     AB = -2.5 * log [Flux(frequency)] - 48.57 instead of
+c     AB = -2.5 * log [Flux(frequency)] - 48.60
+c
 c      sim_nicmos = 1.5091905d3 * f_nu *1.0d-4 /wavelength
+c      sim_flux   = sim_nicmos * mirror_area
+c      sim_flux   = sim_flux  * bandwidth * system_transmission * 1.d04
 c      print *, 'ab_mag_to_photon_flux:', mag, f_nu, wavelength,
 c     *     bandwidth, photon_flux_per_unit_area,
-c     *     system_transmission, sim_nicmos,ab_mag_to_photon_flux
+c     *     system_transmission, sim_nicmos,ab_mag_to_photon_flux,
+c     *     sim_flux
 c      stop
       return
       end

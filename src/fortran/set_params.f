@@ -1,7 +1,7 @@
       subroutine set_params(mode, nframe, nskip, max_groups)
       implicit none
       integer max_groups, nframe, nskip
-      character mode*10
+      character mode*(*)
       
       if(mode(1:6) .eq. 'RAPID' .or. mode(1:6) .eq. 'rapid') then
          max_groups = 10

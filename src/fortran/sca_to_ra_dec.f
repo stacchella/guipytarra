@@ -31,6 +31,6 @@ c         call rotate_coords(xc, yc, x_osim, y_osim, -pa_degrees, x, y)
          ra_cat  = ra_c  + (x -xc)/deg_to_osim/cosdec
 c         print 10, x_osim, y_osim, x_sca, y_sca, ra_cat, dec_cat
  10      format('sca_to_ra_dec: osim,sca, ra,dec ',6(1x,f20.15))
-      end if
+       end if
       return
       end

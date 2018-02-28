@@ -1,6 +1,11 @@
 c      character filename*80
+c      integer cat_filter, filters_in_cat, nf_used, ngal
+c      dimension cat_filter(54)
+c      filters_in_cat = 8
 c      filename = 'fake_mag_cat.cat'
-c      call read_fake_mag_cat(filename)
+c      filename = 'candels_with_fake_mag.cat'
+c      call read_fake_mag_cat(filename,cat_filter,filters_in_cat,
+c     *     nf_used, ngal)
 c      stop
 c      end
 cc
@@ -36,7 +41,10 @@ c
      *     theta, flux_ratio, ncomponents, id
 c
       q = dacos(-1.0d0)/180.d0
+      nf_used = filters_in_cat
 c
+      print *, filters_in_cat
+      print *, filename
       open(1,file=filename)
       read(1,*)
       ngal = 0
@@ -49,7 +57,8 @@ c
  30      continue
          print *,'skipping '
          print 40, l, tra, tdec, tmagnitude,
-     *        tz, semi_major, semi_minor, ttheta, tnsersic
+     *        tz, semi_major, semi_minor, ttheta, tnsersic,
+     *        (abmag(j), j = 1, filters_in_cat)
  40      format(i8,20(1x,f15.6))
          go to 90
  50      continue
@@ -67,6 +76,7 @@ c
          tdec2 = tdec + ddec
 
 c         if(tmagnitude.gt.25.d0) go to 90
+c
          ngal = ngal + 1
          id(ngal)           = l
          ra(ngal)           = tra
@@ -90,7 +100,7 @@ c         end do
          nsersic(ngal,1)     = tnsersic
          re(ngal,1)          = dsqrt(semi_major*semi_minor)
          flux_ratio(ngal,1)  = 1.d0
-         theta(ngal,1)       = ttheta + 90.d0
+         theta(ngal,1)       = ttheta !+ 90.d0
 c         print *,  ncomponents(ngal),ellipticity(ngal,1), 
 c     *        nsersic(ngal,1), re(ngal,1) 
          
@@ -99,8 +109,8 @@ c            print 40,  l, tra, tdec, tmagnitude,
 c     *           tz, semi_major, semi_minor, ttheta, tnsersic,
 c     *           (magnitude(ngal, j), j = 1, nf_used)
 c         end if
-         write(line,60) tra1, tdec1, tra2, tdec2, 
-     *        magnitude(ngal,nf_used)
+         write(line,60) tra1, tdec1, tra2, tdec2
+     *        ,magnitude(ngal,nf_used)
  60      format('fk5;line(',f12.6,',',f12.6,',',f12.6,',',f12.6,
      *        ' # line = 0 0 color=black text={',f5.2,'}')
          write(2,70) line

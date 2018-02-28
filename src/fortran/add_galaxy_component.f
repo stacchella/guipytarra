@@ -3,6 +3,7 @@ c-----------------------------------------------------------------------
 c
       subroutine add_galaxy_component(xg, yg, magnitude, id,
      *     ellipticity,re, rmax, theta, nsersic, zp, scale, 
+     *     pa_degrees,
      *     wavelength, bandwidth, system_transmission, 
      *     mirror_area, integration_time,seed, 
      *     noiseless, psf_add, ipc_add, debug)
@@ -13,6 +14,7 @@ c
       double precision xg, yg, magnitude, ellipticity, re, rmax, theta,
      *     nsersic, zp, scale, mirror_area, wavelength,
      *     bandwidth, system_transmission, integration_time
+      double precision a11, a12, a21, a22
       integer seed, debug, id, cube, overlap, last, indx
 c
       real accum, image, gain_image
@@ -21,7 +23,7 @@ c
       double precision photons, cospa, sinpa, axial_ratio, ymax, ran,
      *     rr, angle, sina, cosa, chi, a_prime, b_prime,
      *     xgal, ygal, xhit, yhit, flux_total, pi, q, two_pi,
-     *     intensity
+     *     intensity, pa_degrees
       integer nr, nnn,i, j, expected, ix, iy,n_image_x, n_image_y
 c
       double precision ab_mag_to_photon_flux,zbqlu01
@@ -69,7 +71,7 @@ c
       
       if(debug.gt.1) then
          print *, magnitude, mirror_area, wavelength, bandwidth, 
-     *        system_transmission
+     *        system_transmission, integration_time
 c         expected  = photons * integration_time
          print *,' add_galaxy_component not random:',expected,
      *        photons*integration_time
@@ -86,29 +88,45 @@ c      sinpa  = dsin(theta*q)
 c     This gives correct PAs when the PA in the original catalogue
 c     has N= 0, E =90
 c
-      cospa  = dcos((theta+90.d0)*q)
-      sinpa  = dsin((theta+90.d0)*q)
+c      cospa  = dcos((90.d0-theta)*q)
+c      sinpa  = dsin((90.d0-theta)*q)
+c     As angles are normally measured relative to the X axis and
+c     we are dealing with position angles, which are measured relative
+c     to North, add offset
+c
+      angle  =  theta + 90.d0 - pa_degrees
+c      cospa  = dcos((-theta)*q)
+c      sinpa  = dsin((-theta)*q)
+      cospa  = dcos(angle*q)
+      sinpa  = dsin(angle*q)
       axial_ratio = 1.d0 - ellipticity
 c     
       ymax = int_profile(nr)
 c     
       flux_total = 0.0d0
+c
+c     Sample randomly in polar coordinates
+c
       do  j = 1,   expected
          ran = int_profile(1) + 
      *        zbqlu01(seed) * (ymax-int_profile(1))
          call linear_interpolation(nr, int_profile, radius, ran, 
-     *        rr, nnn)
+     *        rr)
+c
+c     angular random variate
+c
          angle   = zbqlu01(seed) * two_pi
-         sina    = dsin(angle)
-         cosa    = dcos(angle) 
+c         sina    = dsin(angle)
+c         cosa    = dcos(angle) 
          a_prime =  rr / dsqrt(axial_ratio)/scale
          b_prime =  a_prime * (axial_ratio)
 c     
 c     Position angles are relative to X, Y axis
 c     
          chi   = angle + theta * q
-         xgal  = a_prime * dcos(chi) *cospa - b_prime*dsin(chi)*sinpa
-         ygal  = a_prime * dcos(chi) *sinpa + b_prime*dsin(chi)*cospa
+         chi   = angle
+         xgal  = a_prime * dcos(chi) *cospa + b_prime*dsin(chi)*sinpa
+         ygal  =-a_prime * dcos(chi) *sinpa + b_prime*dsin(chi)*cospa
          xgal  = xg + xgal
          ygal  = yg + ygal
 c     

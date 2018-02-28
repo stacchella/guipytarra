@@ -15,7 +15,7 @@ c
      *     pa_degrees,
      *     filename, noise_name,
      *     sca_id, module, brain_dead_test, 
-     *     xc, yc, pa_v3, osim_scale,scale,
+     *     xc, yc, osim_scale,scale,
      *     include_ktc, include_dark, include_readnoise, 
      *     include_reference,
      *     include_1_over_f, include_latents, include_non_linear,
@@ -38,7 +38,7 @@ c
      *     background, scale, bias_value
       double precision  even_odd
       double precision x_sca, y_sca, ra_sca, dec_sca
-      double precision xc, yc, pa_v3, q, posang, ra_dithered,
+      double precision xc, yc, q, posang, ra_dithered,
      *     dec_dithered, osim_scale, x_osim, y_osim,
      *     pa_degrees
       double precision linearity_gain,  lincut, well_fact
@@ -82,7 +82,7 @@ c
       character object*20, partname*5, module*20, filter_id*5
       character noise_name*120
 c     
-      character subarray*8
+      character subarray*(*)
 c
       parameter (nnn=2048, max_order=7, overlap=30)
 c
@@ -121,6 +121,8 @@ c
       tol = 1.d-10
       eps = 1.d-16
 c
+      job = 1
+c
       if(verbose.gt.0) then
          print 10,sca_id, filter_index, filter_id, idither
  10      format('sca_image:  sca ', i4,' filter ', i4, 2x, a5,
@@ -145,6 +147,7 @@ c     include the SIP keywords. For now assume all is plane.
 c
       x_sca = 1024.d0
       y_sca = 1024.d0
+c
       call wcs_keywords(sca_id, x_sca, y_sca, xc, yc, osim_scale,
      *     ra_dithered, dec_dithered,  pa_degrees,verbose)
       call osim_coords_from_sca(sca_id, x_sca, y_sca, x_osim, y_osim)
@@ -152,6 +155,14 @@ c
      *     ra_dithered, dec_dithered,
      *     ra_sca, dec_sca, pa_degrees, 
      *     xc, yc, osim_scale, x_sca, y_sca)
+      print *,'crval1, crval2', crval1, crval2
+      print *,'crpix1, crpix2', crpix1, crpix2
+      print *,'ra_dithered, dec_dithered',ra_dithered, dec_dithered
+      print *,'ra_sca, dec_sca',ra_sca, dec_sca
+      print *,'pa_degrees, osim_scale',pa_degrees, osim_scale
+      print *,'xc, yc', xc, yc
+c      print *,'stop at sca_image'
+c      stop
 c
 c
 c     Read PSF
@@ -216,7 +227,7 @@ c
 c     Initialise image and 
 c     create baseline image (bias + ktc)
 c     
-      if(include_ktc.eq.0) then
+      if(include_ktc.eq.0 .and.noiseless .eqv. .false.) then
          bias_value = 10.0d0
       end if
       if(include_ktc.eq.1) then
@@ -283,12 +294,13 @@ c
      *     n_image_x, n_image_y, ngroups, bitpix,
      *     naxis, naxes,
      *     nframe, tframe, groupgap, tgroup, ngroups, nskip,
+     *     ra_dithered, dec_dithered, pa_degrees,
      *     object, partname, sca_id, module, filter_id,
      *     photplam, photflam, stmag, abmag,
      *     subarray,  colcornr, rowcornr,naxis1, naxis2, job,
      *     include_ktc, include_bg, include_cr, include_dark,
      *     include_latents, include_readnoise, include_non_linear,
-     *     bias_value, read_noise, background, verbose)
+     *     bias_value, read_noise(indx), background, verbose)
       if(verbose.gt.1) print *, 'open_big_fits_cube done'
 
 c
@@ -363,7 +375,7 @@ c
      &              background,' e-/sec/pixel'
                call add_sky_background(background,
      *              subarray, colcornr, rowcornr, naxis1, naxis2,
-     *              integration_time, verbose)
+     *              integration_time, noiseless,verbose)
             end if
 c
 c     add cosmic rays [e-]
@@ -505,14 +517,14 @@ c
      *        n_image_y, ngroups
       end if
 c
-      write(filename,1200) filter_id,iabs(sca_id),idither
- 1200 format('history_',a5,'_',i3.3,'_',i3.3,'.fits')
-      ibitpix = 32
-      call write_int_3d_image(filename, cube, n_image_x, n_image_y,
-     *     ibitpix,
-     *     nframe, tframe, groupgap, tgroup, overlap, object, partname, 
-     *     partname, sca_id,module, filter_id,
-     *     subarray, colcornr, rowcornr, naxis1, naxis2, job)
+c      write(filename,1200) filter_id,iabs(sca_id),idither
+c 1200 format('history_',a5,'_',i3.3,'_',i3.3,'.fits')
+c      ibitpix = 32
+c      call write_int_3d_image(filename, cube, n_image_x, n_image_y,
+c     *     ibitpix,
+c     *     nframe, tframe, groupgap, tgroup, overlap, object, partname, 
+c     *     partname, sca_id,module, filter_id,
+c     *     subarray, colcornr, rowcornr, naxis1, naxis2, job)
 c
       return
       end

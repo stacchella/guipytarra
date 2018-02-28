@@ -4,6 +4,7 @@ c
       subroutine open_big_fits_cube(filename, iunit, nx, ny, nz,bitpix,
      *     naxis, naxes,
      *     nframe, tframe, groupgap, tgroup, ngroup, nskip,
+     *     ra, dec, pa_degrees,
      *     object, partname, sca_id, module, filter, 
      *     photplam, photflam, stmag, abmag,
      *     subarray, colcornr, rowcornr, naxis1, naxis2,job,
@@ -13,7 +14,7 @@ c
 c
       implicit none
       character telescop*20, instrume*20, filter*5,
-     *     module*4, partname*5,comment*40, object*20      
+     *     module*20, partname*5,comment*40, object*20      
       real image, tframe, tgroup
       integer status, bitpix, naxes, naxis, pcount, gcount, block,
      *     groupgap, sca_id, job, verbose
@@ -32,6 +33,7 @@ c      double precision  bzero, bscale
       character filename*120
 c
       double precision sec, ut, jday, mjd
+      double precision ra, dec, pa_degrees
       double precision expstart, expmid, expend, effexptm
       integer ih, im, month, day, year
       character  date_obs*10, time_obs*12, full_date*23,
@@ -212,6 +214,11 @@ c     exposure time for this ramp
 c
       exptime = total_time(nframe, nskip, ngroup, 1,
      *     dble(tframe))
+      if(exptime.le.0) then
+         print *,'open_big_fits_cube: total_time.f', exptime
+         print *,'negative time ?'
+         stop
+      endif
       if(verbose.ge.2) print *,'open_big_fits_cube ftpkye exptime',
      &     exptime
       comment = 'Exposure time'
@@ -239,6 +246,37 @@ c
 c
       ut = ih + im/60.d0 + sec/3600.d0
       expstart = mjd + ut/24.d0
+c
+c----------------------------
+c
+c     coordinates
+c
+      comment = 'Target RA at mid time of exposure'
+      call ftpkyd(iunit,'TARG_RA',ra,-15,
+     *     comment,status)
+      if (status .gt. 0) then
+         call printerror(status)
+         print *, 'TARG_RA'
+      end if
+      status =  0
+c
+      comment = 'Target DEC at mid time of exposure'
+      call ftpkyd(iunit,'TARG_DEC',dec,-15,
+     *     comment,status)
+      if (status .gt. 0) then
+         call printerror(status)
+         print *, 'TARG_DEC'
+      end if
+      status =  0
+c      
+      comment = 'Position angle of V3-axis of JWST'
+      call ftpkyd(iunit,'PA_V3', pa_degrees,-7,
+     *     comment,status)
+      if (status .gt. 0) then
+         call printerror(status)
+         print *, 'PA_V3'
+      end if
+      status =  0
       
 c
 c     write more header keywords

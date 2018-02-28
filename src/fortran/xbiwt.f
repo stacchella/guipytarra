@@ -57,14 +57,19 @@ c****************************************************************************
        double precision temp, xdatain
        integer i,n,j
        integer nnn, debug
-       parameter (nnn=1048576)
-c        parameter (nnn=67108864)
+c       parameter (nnn=1048576)
+        parameter (nnn=4194304)
        dimension xdata(nnn),u1(nnn),u2(nnn),xlb(11),xsb(11)
         dimension xdatain(nnn), temp(nnn)
         data zero,d6,d1,d5,d9/0.0,6.0,1.0,5.0,9.0/
 c
 c     copy input data 
 c
+        if(n.gt. nnn) then
+           print *,'XBIWT: array size too large:'
+           print *,' N is  ', n,'  must be <= nnn: ',nnn
+           stop
+        endif
         do i = 1, n
            xdata(i) = xdatain(i)
         end do

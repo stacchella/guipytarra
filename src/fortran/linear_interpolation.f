@@ -7,17 +7,17 @@ c     cnaw 2015-01-22
 c     Steward Observatory, University of Arizona
 c     
       subroutine linear_interpolation(npts, xarray, yarray, 
-     *     xvalue, yvalue, nnn)
+     *     xvalue, yvalue)
 c
       implicit none
       double precision xarray, yarray, xvalue, yvalue, dx, w1,w2
       integer npts, nnn, indx
 c     
-      dimension xarray(nnn), yarray(nnn)
+      dimension xarray(npts), yarray(npts)
 c
 c     find closest index
 c
-      call find_index(npts, xarray, xvalue, indx, nnn)
+      call find_index(npts, xarray, xvalue, indx)
 c
 c     calculate the linear interpolation
 c
@@ -51,12 +51,12 @@ c
 c     cnaw 2015-01-22
 c     Steward Observatory, University of Arizona
 c
-      subroutine find_index(npts, array, x, ii, nnn)
+      subroutine find_index(npts, array, x, ii)
 c
       implicit none
       double precision array, x
       integer  nnn, npts, ii, j, lower, upper, partition
-      dimension array(nnn)
+      dimension array(npts)
 c
       lower = 0
       upper = npts+1

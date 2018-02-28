@@ -57,6 +57,7 @@ c
       null   = -1
       status = 0
       call ftgiou(unit, status)
+      print *,'add_one_over_f_noise: ',filename
       call ftopen(unit, filename, 1, block, status)
 
       call ftgkyj(unit,"BITPIX",bitpix,comment, status)

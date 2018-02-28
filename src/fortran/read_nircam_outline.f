@@ -42,13 +42,16 @@ c     Values from Dan Coe 2016-11-18 for pointing centroid (SIAF coordinates)
 c     
       x0_nircam  =   -0.3174d0 ! arc sec
       y0_nircam  = -492.5913d0 ! arc sec
-      x0_nircam  = x0_nircam/60.d0         ! = -0.00529
-      y0_nircam  = y0_nircam/60.d0 + 7.8d0 ! = -0.409855
+      x0_nircam  = x0_nircam/60.d0         ! = -0.00529 arc min
+      y0_nircam  = y0_nircam/60.d0 !+ 7.8d0 ! = -0.409855 arc min
 c
 c     The "Y" values in jwst.dat are in XAN, YAN coordinates. 
 c     V2 = XAN but V3 = -YAN +7.8 , so change sign for the latter
 c
 c      open(1,file='nircam_2014_02_12.dat')
+c
+c     nircam_flight.dat uses V2, V3 coordinates for the vertices
+c
       open(1,file='nircam_flight.dat')
       do j = 1, 10
          do i = 1, 6
@@ -65,5 +68,7 @@ c         print 10, xnircam(6,j), ynircam(6,j), px, py, sca(j)
       end do
       close(1)
 c
+c      print *,'read_nircam_outline: Centre of NIRCam in V2, V3 at'
+c      print 10, x0_nircam, y0_nircam
       return
       end

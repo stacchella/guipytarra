@@ -11,12 +11,24 @@ c
      *     nframe, ngroup, iunit, job
       integer status, groupgap, drop_frame_1,sca_id
       character telescop*20, instrume*20, filter*5,
-     *     module*4, partname*5,comment*40, object*20,
+     *     module*20, partname*5,comment*40, object*20,
      *     cunit1*4, cunit2*4
       real tframe, tgroup
-      double precision 
-     *     equinox, crpix1, crpix2, crval1, crval2,
-     *      cdelt1, cdelt2, cd1_1, cd1_2, cd2_1, cd2_2, cd3_3
+
+      double precision equinox,crpix1, crpix2, crpix3,
+     &     crval1, crval2, crval3, cdelt1, cdelt2,cdelt3,
+     &     pc1_1, pc1_2, pc2_1, pc2_2, pc3_1, pc3_2, cd3_3,
+     *     cd1_1, cd1_2, cd2_1, cd2_2, cd3_2
+c      common /wcs/ equinox, 
+c     *     crpix1, crpix2, crpix3,
+c     *     crval1, crval2, crval3,
+c     *     cdelt1, cdelt2, cdelt3,
+c     *     cd1_1, cd1_2, cd2_1, cd2_2, cd3_3,
+c     *     pc1_1, pc1_2, pc2_1, pc2_2, pc3_1, pc3_2
+c
+c     double precision 
+c     *     equinox, crpix1, crpix2, crval1, crval2,
+c     *      cdelt1, cdelt2, cd1_1, cd1_2, cd2_1, cd2_2, cd3_3
       common /wcs/ equinox, crpix1, crpix2, crval1, crval2,
      *     cdelt1,cdelt2, cd1_1, cd1_2, cd2_1, cd2_2
 
@@ -26,7 +38,7 @@ c
 c     The following are fixed...
 c
       instrume = 'NIRCam'
-      telescop = 'Az_Lab'
+      telescop = 'Guitarra'
       if(dhas_subarray .eqv. .True.) then
          ibrefrow = 0
          itrefrow = 0
@@ -98,7 +110,7 @@ c
        end if
       status =  0
 c
-      comment='                                       '
+      comment='The machine that makes fake galaxies   '
       call ftpkys(iunit,'TELESCOP',telescop,comment,status)
        if (status .gt. 0) then
           call printerror(status)
