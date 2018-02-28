@@ -16,7 +16,6 @@ c
      &     verbose
 c
       character filterid*20, tempfile*80
-      character path_guitarra*100
 c
       parameter (nnn=25000,mmm=200,lll=1000,npar=30, nfilters = 54)
 c
@@ -35,10 +34,7 @@ c
 c     read filter parameters
 c
 c      open(1,file='calibrated_filters.dat')
-c      open(1,file='nircam_calib.list')
-      call getenv('GUITARRA_HOME',path_guitarra)
-      open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //'data/nircam_calib.list')
+      open(1,file='nircam_calib.list')
       nf = 0
       do i = 1, nfilters
          read(1,110,end=200, err=120) tempfile
@@ -48,7 +44,7 @@ c      open(1,file='nircam_calib.list')
  130     format('problem with ',i3,2x,a80)
          stop
  140     nf = nf + 1
-         open(3,file=path_guitarra(1:len_trim(path_guitarra))//tempfile)
+         open(3,file= tempfile)
          read(3,290) len, filterid(nf)
  290     format(i6,1x,a20)
 c         print 290,  len, filters(nf)

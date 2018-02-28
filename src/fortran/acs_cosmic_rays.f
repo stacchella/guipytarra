@@ -22,8 +22,7 @@ c
       double precision intensity, rate, xx, yy, acs_area, sum
       real cr_matrix, cr_flux, cr_accum
       integer i, len, n, n_smooth, ncr, n_cr_levels
-      character file*160
-      character path_guitarra*100
+      character file*80
       parameter (len=1000)
       parameter(ncr = 21)
 c
@@ -34,8 +33,7 @@ c
 c      
       common /cr_list/ cr_matrix, cr_flux, cr_accum, n_cr_levels
 
-      call getenv('GUITARRA_HOME',path_guitarra)
-      file = path_guitarra(1:len_trim(path_guitarra))//'acs_better.cat'
+      file = 'acs_better.cat'
 c     
 c     open file and read
 c     

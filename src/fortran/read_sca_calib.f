@@ -22,13 +22,9 @@ c
      *     ngx, ngy, nbx, nby, nwx, nwy, max_order, order, good,
      &     m, n, verbose
       character filename*120, partname*5
-      character darkfile*180, flatfile*180, biasfile*180, file*180,
-     *     gainfile*180, sigmafile*180, WellDepthFile*180,
-     *     linearityfile*180, badpixelmask*180
-      character darkfile_r*180, biasfile_r*180, sigmafile_r*180,
-     *     gainfile_r*180, linearityfile_r*180, badpixelmask_r*180,
-     *     WellDepthFile_r*180
-      character path_guitarra*100
+      character darkfile*120, flatfile*120, biasfile*120, file*120,
+     *     gainfile*120, sigmafile*120, WellDepthFile*120,
+     *     linearityfile*120, badpixelmask*120
 c
       parameter (nnn=2048,nz=30,max_order=7)
 c
@@ -74,30 +70,16 @@ c
          write(file,25) sca_id
  25      format(i3,'_calib.list')
 c     
-c         open (1,file=file)
-         call getenv('GUITARRA_HOME',path_guitarra)
-         open (1,file=path_guitarra(1:len_trim(path_guitarra))
-     +           //'data/'//file)
+         open (1,file=file)
 c         read(1,30)  flatfile
-         read(1,30)  biasfile_r
-         read(1,30)  badpixelmask_r
-         read(1,30)  darkfile_r
-         read(1,30)  sigmafile_r
-         read(1,30)  gainfile_r
-         read(1,30)  linearityfile_r
-         read(1,30)  WellDepthFile_r         
-         biasfile = path_guitarra(1:len_trim(path_guitarra))//biasfile_r
-         badpixelmask = path_guitarra(1:len_trim(path_guitarra))
-     +                    //badpixelmask_r
-         darkfile = path_guitarra(1:len_trim(path_guitarra))//darkfile_r
-         sigmafile = path_guitarra(1:len_trim(path_guitarra))
-     +                    //sigmafile_r
-         gainfile = path_guitarra(1:len_trim(path_guitarra))//gainfile_r
-         linearityfile = path_guitarra(1:len_trim(path_guitarra))
-     +                   //linearityfile_r
-         WellDepthFile = path_guitarra(1:len_trim(path_guitarra))
-     +                   //WellDepthFile_r
+         read(1,30)  biasfile
+         read(1,30)  badpixelmask
+         read(1, 30) darkfile
+         read(1,30)  sigmafile
+         read(1,30)  gainfile
+         read(1,30)  linearityfile
          if(verbose.gt.0) print 30,   linearityfile
+         read(1,30)  WellDepthFile
  30      format(a120)
          close(1)
 c     

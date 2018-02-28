@@ -11,7 +11,6 @@ c
       double precision sersic_bn, ie_sersic, sersic_profile, flux_to_r,
      *     sb_sersic, find_ie, mag_to_r, total_mag
       integer nr, nnn, i, debug
-      character path_guitarra*100
 c
       dimension radius(nnn), profile(nnn), int_profile(nnn)
 c
@@ -51,11 +50,7 @@ c
       dr = dlog10(rmax/eps)/dble(nr-1)
       if(debug.gt.1) print *,'int_sersic: rmax, dr ', rmax, dr
       sum = 0.d0
-      call getenv('GUITARRA_HOME',path_guitarra)
-      if(debug.eq.1) then
-         open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //'int_sersic.dat')
-      end if
+      if(debug.eq.1) open(1,file='int_sersic.dat')      
       do i = 1, nr
          radius(i)  = eps*10.d0**(dble(i-1)*dr)
          if(radius(i) .eq.0.0d0) then

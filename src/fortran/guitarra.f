@@ -78,15 +78,15 @@ c     new (ISIM CV2) keywords for subarray
 c
       integer nfilter_wl, nfilters, npar, nbands, nsub, ncomponents
 
-      character filterid*20, temp*20, galaxy_catalogue*180, 
-     *     star_catalogue*180, filename_param2*180, filter_id*5
+      character filterid*20, temp*20, galaxy_catalogue*120, 
+     *     star_catalogue*120, filter_id*5
 
 
       integer   colcornr, rowcornr, naxis1, naxis2
       character subarray*8
 c
-      character psf_file*180, read_patt*10, filename*180, text*10,
-     *     clone_path*180, noise_name*180
+      character psf_file*120, read_patt*10, filename*120, text*10,
+     *     clone_path*120, noise_name*120
       character object*20, partname*20, module*20
       character primary_dither*20, subpixel_dither*20, camera*20
 c
@@ -250,42 +250,11 @@ c
       noiseless = .false.
       psf_add   = .true.
       ipc_add   = .true.
-
-c=======================================================================
+      
 c
-c     Read dither position, the associated catalogue, detector
-c     and filter for this scene. The catalogue must have been
-c     already tailored to the detector area
+c     Read parameters
 c
-      print *,' this should be run in batch mode :'
-      print *,' guitarra < params_F356W_490_001.input'
-      read(5,92) filename_param2
-      print *,'other parameter file = ', filename_param2
-      read(5,*,err=89) idither
- 89   print *,'idither = ', idither
-      read(5,*,err=90) filename
- 90   print *, filename
-      read(5,*,err=91) noise_name
- 91   print *,noise_name
-      read(5,*) ra0
-      read(5,*) dec0
-      read(5,*) new_ra
-      read(5,*) new_dec
-      read(5,*) dx(idither)
-      read(5,*) dy(idither)
-      read(5,*) sca_id
-      read(5,*) indx
-      read(5,*) icat_f
-      read(5,92) star_catalogue
- 92   format(a180)
-      read(5,92) galaxy_catalogue
-      read(5,*) filters_in_cat
-
-    
-c
-c     Read parameters from parameter file 2
-c
-      call read_parameters(filename_param2, verbose, brain_dead_test,
+      call read_parameters(verbose, brain_dead_test,
      *     module, read_patt, ngroups, nframe,
      *     subarray, colcornr, rowcornr, naxis1, naxis2, 
      *     camera, primary_dither, subpixel_dither, 
@@ -298,7 +267,11 @@ c
      *     zodiacal_scale_factor, 
      *     include_stars, nstars, star_catalogue,
      *     include_galaxies, ngal, include_cloned_galaxies, 
-     *     galaxy_catalogue, nf, use_filter, cat_filter)
+     *     galaxy_catalogue,
+c     *     h0, omega_m, omega_l,  omega_r, omega_nu, w, wprime,
+c     *     phistar, mstar, alpha, q_evol, p_evol, zmin, zmax,
+c     *     bright, faint, apm_bright, apm_faint, solid_angle,
+     *     nf, use_filter, cat_filter)
 c
 c=======================================================================
 c
@@ -473,11 +446,45 @@ c
       seed = 0
       call zbqlini(seed)
 c     
+c=======================================================================
+c
+c     Read dither position, the associated catalogue, detector
+c     and filter for this scene. The catalogue must have been 
+c     already tailored to the detector area
+c     
+      print *,' this should be run in batch mode :'
+      print *,' guitarra < params_F356W_490_001.input'
+      read(5,*,err=89) idither
+ 89   print *,'idither = ', idither
+      read(5,*,err=90) filename
+ 90   print *, filename
+      read(5,*,err=91) noise_name
+ 91   print *,noise_name
+      read(5,*) ra0
+      read(5,*) dec0
+      read(5,*) new_ra
+      read(5,*) new_dec
+      read(5,*) dx(idither)
+      read(5,*) dy(idither)
+      read(5,*) sca_id
+      read(5,*) indx
+      read(5,*) icat_f
+      read(5,92) star_catalogue
+ 92   format(a80)
+      read(5,92) galaxy_catalogue
+c
+      filters_in_cat = 20
+c
 c**************************************************************************
 c
 c     Read source catalogues 
 c
 c**************************************************************************
+c
+      open(7,file = 'fake_objects.reg')
+      open(9,file = 'fake_objects_rd.reg')
+      open(8,file = 'fake_objects.cat')
+c
 c
       if(include_stars.gt.0) then 
          call read_star_catalogue(star_catalogue, nf_used, verbose)
@@ -491,8 +498,11 @@ c
       if(verbose.ge.2) then
          do i = 1, 10
             print * ,ra_galaxies(i), dec_galaxies(i), nf,
-     &           (magnitude(i,j),j = 1,nf)           
+     &           (magnitude(i,j),j = 1,nf)
+            
          end do
+c         print *,'pause'
+c         read(*,'(A)')
       end if
 c
 c**************************************************************************
@@ -510,6 +520,7 @@ c
       j                   = indx
       
       temp                = filterid(j)
+c     filter_id           = temp(8:12)
       filter_id           = temp(1:5)
       wavelength          = filtpars(j,5) ! effective_wl_nircam(j)
       bandwidth           = filtpars(j,16) ! width_nircam(j)
@@ -534,7 +545,7 @@ c
      &     psf_file(j)
  120  format('main:       sca',2x,i3,' filter ',i4,2x,a5,
      &     ' scale',2x,f6.4,' wavelength ',f7.4,
-     &     2x,a180)
+     &     2x,a50)
       PRINT *,'PA_DEGREES ', PA_DEGREES, 'PAUSE'
 c
 c***********************************************************************

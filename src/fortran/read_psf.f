@@ -11,7 +11,7 @@ c
       integer over_sampling_rate, nx, ny, n_psf_x, n_psf_y, i, j, nnn,
      &     det_samp, verbose
       real psf
-      character file*180
+      character file*120
       parameter(nnn=2048, nxny=2048*2048)
       dimension psf(2048,2048), dpsf(2048,2048),integrated_psf(nxny)
       common /psf/ integrated_psf,n_psf_x, n_psf_y, 

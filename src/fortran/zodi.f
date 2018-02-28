@@ -17,7 +17,6 @@ c
      *     stsci, f_nu, ratio, low, average, cee, f_lam, e_flux, 
      *     arc_sec_per_radian, mirror_area
       integer ii, nfilters, mode, npar, indx, nf, verbose
-      character path_guitarra*100
 c
       parameter(nfilters=54, npar=30)
 c
@@ -66,9 +65,7 @@ c
 c     
 c     STSCI ETC background in e-/sec/arc_sec**2
 c
-      call getenv('GUITARRA_HOME',path_guitarra)
-      open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +            //'data/etc_stsci_sky_bkg_2015_02_12.dat')
+      open(1,file='etc_stsci_sky_bkg_2015_02_12.dat')
 c     
 c     This is necessary as there are A/B filters, while
 c     ETC uses only a generic filter

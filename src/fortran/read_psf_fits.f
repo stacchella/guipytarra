@@ -9,7 +9,7 @@ c
       integer unit, status, bitpix, det_samp, nnn, nx, ny, ncol, nrow,
      &     readwrite, verbose
       character name*20, comment*80
-      character filename*160
+      character filename*120
 c
       parameter (nnn=2048)
 c
@@ -23,7 +23,7 @@ c
       call openfits(unit, readwrite, filename)
       call ftgkyj(unit,"BITPIX",bitpix,comment, status)
       if(verbose.gt.1) print 40, filename
- 40   format('read_psf_fits: reading file ', a180)
+ 40   format('read_psf_fits: reading file ', a80)
       call  ftgkyj(unit,"DET_SAMP",det_samp,comment, status)
       if(status.ne.0) then
          print *,'DET_SAMP'

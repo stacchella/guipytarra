@@ -1,5 +1,5 @@
-      subroutine read_parameters(filename_param2, verbose,
-     *     brain_dead_test, module, mode, ngroups, nframe,
+      subroutine read_parameters(verbose,brain_dead_test,
+     *     module, mode, ngroups, nframe,
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
      *     camera, primary_dither, subpixel_dither, 
      *     number_primary, number_subpixel, 
@@ -19,12 +19,10 @@ c     *     bright, faint, apm_bright, apm_faint, solid_angle,
       
       implicit none
       character subarray*8
-      character filename_param2*180
 c
-      character mode*10, galaxy_catalogue*180, star_catalogue*180
+      character mode*10, galaxy_catalogue*120, star_catalogue*120
       character primary_dither*20, subpixel_dither*20, camera*20,
      &     module*20
-      character path_guitarra*100
 c
       integer number_primary, number_subpixel
       integer verbose, ngroups, nframe, ndither, nf,
@@ -50,7 +48,7 @@ c
 c
       dimension use_filter(54),cat_filter(54)
 c
-      open(1,file=filename_param2)
+      open(1,file='simulator.params')
       read(1,10) verbose
  10   format(i12)
       print *, 'verbose = ', verbose
@@ -144,8 +142,8 @@ c
       print *, 'include_galaxies          ', include_galaxies
       read(1,10) ngal
       print *, 'ngal                     ', ngal
-c      read(1,10) include_cloned_galaxies
-c      print *, 'include_cloned_galaxies  ', include_cloned_galaxies
+      read(1,10) include_cloned_galaxies
+      print *, 'include_cloned_galaxies  ', include_cloned_galaxies
       read(1, 40) galaxy_catalogue
  40   format(a80)
       print 50, 'read galaxy catalogue    ', galaxy_catalogue

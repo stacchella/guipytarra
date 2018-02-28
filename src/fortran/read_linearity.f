@@ -18,7 +18,7 @@ c
      *     status, naxes, readwrite, blocksize, nfound, order, nhdu,
      *     hdutype, dq, int_null, i, j, ii, jj, good, verbose
       integer max_order
-      character fits_file*180, comment*20
+      character fits_file*120, comment*20
       logical chabu
 c
       parameter(max_order = 7)
