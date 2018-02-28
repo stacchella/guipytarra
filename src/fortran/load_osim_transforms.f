@@ -27,7 +27,6 @@ c
 c
       integer sca, debug, choice, i, ii, j,nn
       character geomaps*30
-      character path_guitarra*100
       dimension sca(10), geomaps(2)
 
       dimension xcorner(5), ycorner(5)
@@ -66,9 +65,7 @@ c
 c     read coefficients
 c     
       choice = 1
-      call getenv('GUITARRA_HOME',path_guitarra)
-      open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +      //'data/'//geomaps(choice))
+      open(1,file=geomaps(choice))
       do i = 1, 10
 c     direct 
 c     (X_pix, Y_pix) -->  (X_osim, Y_osim)
