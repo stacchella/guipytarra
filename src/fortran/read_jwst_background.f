@@ -38,7 +38,8 @@ c     read background file calculated by jwst-background
 c     header
       call getenv('GUITARRA_HOME',path_guitarra)
       open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //'data/jwst_bkg/'+filename)
+     +     //'data/jwst_bkg/'
+     +     //filename)
       do i = 1, 11
          read(1,10) junk
  10      format(a30)
