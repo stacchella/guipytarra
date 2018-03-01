@@ -26,7 +26,7 @@ c
       dimension effective_wl_nircam(nfilters), width_nircam(nfilters), 
      *     system_transmission(nfilters)
 c
-      dimension filters(mmm,nnn),filtpars(mmm,npar), filterid(mmm)
+      dimension filters(2, mmm, nnn),filtpars(mmm,npar), filterid(mmm)
       common /filter/filters, filtpars, filterid
 c     
       common /throughput/effective_wl_nircam, width_nircam,
