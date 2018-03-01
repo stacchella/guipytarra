@@ -40,6 +40,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	closefits.f \
 	coadd.f \
 	cr_distribution.f \
+	data_model_fits.f \
 	divide_frame.f \
 	find_sca_coords.f\
 	gain_per_amp.f \
@@ -53,6 +54,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	inverse_correction.f \
 	jl_latent.f \
 	julian_day.f \
+	jwst_keywords.f \
 	linearity_incorrect.f \
 	linear_interpolation.f \
 	linearity_table.f \
@@ -75,7 +77,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	read_fits.f \
 	read_funky_fits.f \
 	read_gclf.f \
-	read_parameters.f \
+	read_jwst_background.f \
 	read_psf.f \
 	read_linearity.f \
 	read_psf_list.f \
@@ -97,6 +99,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	spline_interp.f \
 	structural.f \
 	total_time.f \
+	ut_to_date_time.f \
 	wcs_keywords.f \
 	wcs_keywords_new.f \
 	write_2d.f \
