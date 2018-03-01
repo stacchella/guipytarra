@@ -16,6 +16,7 @@ c     jwst_backgrounds --day 355 --background_file goods_s_2019_12_21.txt 53.149
      *     i, k, indx, ll, lll, mmm, nnn, npts
 c
       character filename*(*), junk*30, filterid*20
+      character path_guitarra*100
 c
       parameter (nnn=25000,mmm=200,lll=1000)
       parameter(nfilters=54, npar=30)
@@ -35,7 +36,9 @@ c
 c
 c     read background file calculated by jwst-background
 c     header
-      open(1,file=filename)
+      call getenv('GUITARRA_HOME',path_guitarra)
+      open(1,file=path_guitarra(1:len_trim(path_guitarra))
+     +     //'data/jwst_bkg/'+filename)
       do i = 1, 11
          read(1,10) junk
  10      format(a30)
