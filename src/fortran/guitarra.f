@@ -557,6 +557,11 @@ c     read filter parameters
 c
       call read_filter_parameters(nf_used, verbose)
 c     
+      print *,'filters(1, 10, 1)', filters(1, 10, 1)
+      print *,'filters(1, 10, 3)', filters(1, 10, 3)
+      print *,'filters(1, 10, 10)', filters(1, 10, 10)
+      print *,'filters(1, 10, indx)', filters(1, 10, indx)
+c
 c     read list of fits filenames of point-spread-function
 c
       call read_psf_list(psf_file)
