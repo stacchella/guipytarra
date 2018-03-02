@@ -81,7 +81,6 @@ SOURCES = ab_mag_to_photon_flux.f \
 	read_psf_fits.f \
 	read_sca_calib.f \
 	read_sca_wcs.f \
-	read_sim_cat.f \
 	read_star_catalogue.f \
 	resample.f \
 	rotate_coords.f \

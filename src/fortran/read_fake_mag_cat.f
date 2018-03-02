@@ -12,7 +12,7 @@ cc
 c     Read catalogue derived from CANDELs with fake magnitudes, derived
 c     using random sampling of BC2003 spectra
 c
-      subroutine read_fake_mag_cat(filename, cat_filter,filters_in_cat,
+      subroutine read_fake_mag_cat(filename, cat_filter, filters_in_cat,
      *     nf_used, ngal)
       implicit none
       double precision ra, dec, z, magnitude, nsersic,
@@ -48,7 +48,7 @@ c
       open(1,file=filename)
       read(1,*)
       ngal = 0
-c      open(2,file='cat.reg')
+      open(2,file='cat.reg')
       do i = 1, max_objects
          read(1, *, err= 30, end=110) l, tra, tdec, tmagnitude,
      *        tz, semi_major, semi_minor, ttheta, tnsersic,
