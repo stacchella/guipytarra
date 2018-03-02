@@ -54,7 +54,7 @@ c
       call getenv('GUITARRA_HOME',path_guitarra)
       if(debug.eq.1) then
          open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //'int_sersic.dat')
+     +     //'data/int_sersic.dat')
       end if
       do i = 1, nr
          radius(i)  = eps*10.d0**(dble(i-1)*dr)

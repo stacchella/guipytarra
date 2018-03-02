@@ -2,7 +2,7 @@ c
 c     read the file with background calculated by the STScI task jwst-backgrounds:
 c                                                                          RA        DEC    filter_wl
 c     jwst_backgrounds --day 355 --background_file goods_s_2019_12_21.txt 53.1496 -27.78895 3.56
-      subroutine read_jwst_background(filename, indx, pixel,
+      subroutine read_jwst_background(filename_bkg, indx, pixel,
      &     mirror_area, events)
       implicit none
       double precision filters, filtpars
@@ -15,7 +15,7 @@ c     jwst_backgrounds --day 355 --background_file goods_s_2019_12_21.txt 53.149
       integer ii, nfilters, mode, npar, nf, verbose,
      *     i, k, indx, ll, lll, mmm, nnn, npts
 c
-      character filename*(*), junk*30, filterid*20
+      character filename_bkg*(*), junk*30, filterid*20
       character path_guitarra*100
 c
       parameter (nnn=25000,mmm=200,lll=1000)
@@ -37,9 +37,11 @@ c
 c     read background file calculated by jwst-background
 c     header
       call getenv('GUITARRA_HOME',path_guitarra)
+      print *,path_guitarra(1:len_trim(path_guitarra))
+     +     //'data/jwst_bkg/'//filename_bkg
+c
       open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //'data/jwst_bkg/'
-     +     //filename)
+     +     //'data/jwst_bkg/'//filename_bkg)
       do i = 1, 11
          read(1,10) junk
  10      format(a30)
