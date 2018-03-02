@@ -504,7 +504,7 @@ c
       read(5,10)  substrt2
       print *, 'substrt2 ', substrt2
 
-      read(5,10) 'subsize1'
+      read(5,10) subsize1
       print *, 'subsize1 ', subsize1
       read(5,10) subsize2
       print *, 'subsize2 ', subsize2
