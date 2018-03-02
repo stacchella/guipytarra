@@ -500,10 +500,9 @@ c
       print 18, subarray
  18   format(' subarray is ',a15)
       read(5,10)  substrt1
-      print *, 'substrt1 ', 'substrt1'
+      print *, 'substrt1 ', substrt1
       read(5,10)  substrt2
       print *, 'substrt2 ', substrt2
-
       read(5,10) subsize1
       print *, 'subsize1 ', subsize1
       read(5,10) subsize2

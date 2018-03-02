@@ -60,17 +60,15 @@ c         if(wll .eq.3.5) print *, wll, tbkg,photons
 c
 c     rebin background spectrum  and calculate the convolution with filter
 c
+      print *, 'filters ', filters
+c
       photon_flux = 0.d0
       do i = 1, lll
          hh = 1.0d0
          if(i.eq.1 .or. i.eq.lll) hh = 0.5d0
          wavelength  =  filters(1, i, indx)
-         resp        =  filters(2, i, indx) 
-         print *, 'npts ', npts
-         print *, 'wl ', wl
-         print *, 'flux ', flux
+         resp        =  filters(2, i, indx)
          print *, 'wavelength ', wavelength
-         print *, 'mjy ', mjy
          call linear_interpolation(npts, wl, flux, wavelength,
      *           mjy)
          bzzz        = mjy * 1.0d-17 ! Mjy/sr --> erg/(s cm**2 Hz sr)
