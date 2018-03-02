@@ -105,7 +105,7 @@ c
 c     
 c     read wavelength and sensitivity curve
 c
-         do ll =1 , len
+         do ll = 1, len
             read(3,300) filters(1, ll,nf), filters(2,ll,nf)
          end do
          close(3)

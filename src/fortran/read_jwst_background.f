@@ -83,7 +83,7 @@ c     this will be the total number of photo-electrons integrated
 c     over the filter band pass per pixel, taking into account 
 c     the instrumental efficiency and telescope area
 c
-      dwl = filters(1, 2, indx) -filters(1, 1, indx)
+      dwl = filters(1, 2, indx) - filters(1, 1, indx)
       electron_flux = photon_flux * dwl * 1.d-04 
       eflux_total   = electron_flux * mirror_area
       eflux_total   = eflux_total/arc_sec_per_radian**2
