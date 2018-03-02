@@ -70,9 +70,10 @@ c     This is equivalent to 0.0648"/pix /1.00759
 c
 c     read coefficients
 c     
-      call getenv('GUITARRA_HOME',path_guitarra)
+      call getenv('GUITARRA_HOME', path_guitarra)
       choice = 1
-      open(1,file=path_guitarra(1:len_trim(path_guitarra))//geomaps(choice))
+      open(1,file=path_guitarra(1:len_trim(path_guitarra))
+     +     //geomaps(choice))
       do i = 1, 10
 c     direct 
 c     (X_pix, Y_pix) -->  (X_osim, Y_osim)
