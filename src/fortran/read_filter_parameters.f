@@ -40,7 +40,7 @@ c      open(1,file='nircam_calib.list')
       open(1,file=path_guitarra(1:len_trim(path_guitarra))
      +     //'data/nircam_calib.list')
       nf = 0
-      do i = 1, nfilters
+      do i = 1, nfilters/2
          read(1,110,end=200, err=120) tempfile
  110     format(a80)
          go to 140
