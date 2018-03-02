@@ -41,7 +41,8 @@ SOURCES = ab_mag_to_photon_flux.f \
 	coadd.f \
 	cr_distribution.f \
 	data_model_fits.f \
-	find_sca_coords.f\
+	divide_frame.f \
+	find_sca_coords.f \
 	gain_per_amp.f \
 	gammain_bhattacharjee.f \
 	get_date.f \
@@ -95,6 +96,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	structural.f \
 	total_time.f \
 	ut_to_date_time.f \
+	wcs_keywords.f \
 	wcs_keywords_new.f \
 	write_2d.f \
 	write_float_2d_image.f \
