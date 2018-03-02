@@ -44,10 +44,7 @@ c      data geomaps/'CV2_nasa_transforms.dat','fake_transforms.dat'/
 c     modified 2018-02-02:
 c     to use the NIRCam flight solution from Renee Gracey's measurements.
 c
-      call getenv('GUITARRA_HOME',path_guitarra)
-      data geomaps/path_guitarra(1:len_trim(path_guitarra))
-     +   //'data/NIRCam_flight_transforms.dat',
-     +   path_guitarra(1:len_trim(path_guitarra))//'fake_transforms.dat'/
+      data geomaps/'NIRCam_flight_transforms.dat','fake_transforms.dat'/
       data xcorner /5.d0, 2044.d0, 2044.d0,    5.d0,    5.d0/
       data ycorner /5.d0,    5.d0, 2044.d0, 2044.d0,    5.d0/
 c
@@ -73,8 +70,9 @@ c     This is equivalent to 0.0648"/pix /1.00759
 c
 c     read coefficients
 c     
+      call getenv('GUITARRA_HOME',path_guitarra)
       choice = 1
-      open(1,file=geomaps(choice))
+      open(1,file=path_guitarra(1:len_trim(path_guitarra))//geomaps(choice))
       do i = 1, 10
 c     direct 
 c     (X_pix, Y_pix) -->  (X_osim, Y_osim)
