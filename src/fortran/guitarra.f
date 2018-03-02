@@ -1059,10 +1059,10 @@ c
 
       if(include_galaxies .eq. 1 .and. ngal .gt. 0) then 
 
-      call read_fake_mag_cat(galaxy_catalogue, cat_filter, 
+        call read_fake_mag_cat(galaxy_catalogue, cat_filter, 
      &     filter_in_cat, icat_f, ngal)
-      print *,'nf, ngal', filter_in_cat, icat_f, ngal
-     end if
+        print *,'nf, ngal', filter_in_cat, icat_f, ngal
+      end if
       if(verbose.ge.2) then
          do i = 1, 10, 2
             print * ,ra_galaxies(i), dec_galaxies(i),
