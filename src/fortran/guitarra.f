@@ -435,13 +435,13 @@ c
  10   format(i12)
       print *, 'verbose = ', verbose
       read(*,10) brain_dead_test
-      print *, 'brain_dead_test     ', brain_dead_test
+      print *, 'brain_dead_test = ', brain_dead_test
       read(5,*,err=89) idither
- 89   print *,'idither = ', idither
+ 89   print *, 'idither = ', idither
       read(5,*,err=90) cube_name
- 90   print *, cube_name
+ 90   print *, 'cube_name = ', cube_name
       read(5,*,err=91) noise_name
- 91   print *,noise_name
+ 91   print *, 'noise_name = ', noise_name
       read(5,*) ra0
       read(5,*) dec0
       read(5,*) new_ra
@@ -460,27 +460,27 @@ c
 c     catalogues
 c
       read(5,10) include_stars
-      print *,'include_stars                 ', include_stars
+      print *, 'include_stars                ', include_stars
       read(5,9) star_catalogue
  9    format(a80)
       read(5,*) nstars
       read(5,10) include_galaxies
-      print *,'include_galaxies              ', include_galaxies
+      print *, 'include_galaxies             ', include_galaxies
       read(5,9) galaxy_catalogue
       read(5,*) ngal
       read(5,10) include_cloned_galaxies
-      print *,'include_cloned_galaxies       ', include_cloned_galaxies
+      print *, 'include_cloned_galaxies      ', include_cloned_galaxies
 c
 c     number of filters contained in source catalogues
 c
       read(5, *) filter_in_cat 
-      print *,'number of filters in catalogue', filter_in_cat
+      print *, 'number of filters in catalogue', filter_in_cat
       read(5, *) icat_f
 c
 c     name of file containing background SED for observation date
 c
       read(5, 9) zodifile
-      print 9, zodifile
+      print *, 'zodifile = ', zodifile
 c
 c     aperture
       read(5,11) apername
@@ -551,8 +551,6 @@ c
       if(sca_id .eq. 485 .or. sca_id .eq.490) then
          scale = 0.0648d0
       end if
-      print *, idither, ra0, dec0, new_ra, new_dec, dx,
-     *     dy, sca_id, indx
 c
 c=======================================================================
 c

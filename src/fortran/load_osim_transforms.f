@@ -73,7 +73,7 @@ c
       call getenv('GUITARRA_HOME', path_guitarra)
       choice = 1
       open(1,file=path_guitarra(1:len_trim(path_guitarra))
-     +     //geomaps(choice))
+     +     //'data/'//geomaps(choice))
       do i = 1, 10
 c     direct 
 c     (X_pix, Y_pix) -->  (X_osim, Y_osim)

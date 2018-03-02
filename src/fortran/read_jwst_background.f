@@ -66,7 +66,11 @@ c
          if(i.eq.1 .or. i.eq.lll) hh = 0.5d0
          wavelength  =  filters(1, i, indx)
          resp        =  filters(2, i, indx) 
-c         print *, 'wavelength ', wavelength
+         print *, 'npts ', npts
+         print *, 'wl ', wl
+         print *, 'flux ', flux
+         print *, 'wavelength ', wavelength
+         print *, 'mjy ', mjy
          call linear_interpolation(npts, wl, flux, wavelength,
      *           mjy)
          bzzz        = mjy * 1.0d-17 ! Mjy/sr --> erg/(s cm**2 Hz sr)
