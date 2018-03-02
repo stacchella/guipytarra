@@ -43,6 +43,7 @@ c      data geomaps/'CV2_nasa_transforms.dat','fake_transforms.dat'/
 c     modified 2018-02-02:
 c     to use the NIRCam flight solution from Renee Gracey's measurements.
 c
+      call getenv('GUITARRA_HOME',path_guitarra)
       data geomaps/path_guitarra(1:len_trim(path_guitarra)
      +   //'data/NIRCam_flight_transforms.dat',
      +   path_guitarra(1:len_trim(path_guitarra)//'fake_transforms.dat'/
