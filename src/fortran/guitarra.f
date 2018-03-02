@@ -149,7 +149,7 @@ c
       integer bkg_mode
       character zodifile*180
 c
-c     detector.
+c     detector
 c
       integer colcornr, rowcornr
       double precision decay_rate, time_since_previous,voltage_offset,
@@ -169,7 +169,7 @@ c
       double precision ra0, dec0, new_ra, new_dec, dx, dy, pa_degrees
       integer idither, indx, icat_f
 c
-c     Exposure 
+c     exposure 
 c     
       double precision bias_value, readnoise, background, exptime,
      &     integration_time, effective_integration, temp_time
@@ -186,7 +186,7 @@ c
       double precision wavelength, bandwidth, system_transmission, bkg
       double precision filters, filtpars
       double precision photplam, photflam, f_nu, stmag, abmag
-      integer nfilter_wl, nbands, npar, nfilters, use_filter,
+      integer nfilter_wl, nbands, npar, nfilters,
      &     filter_in_cat, nf_used, nf, filter_index, cat_filter
       character filterid*20, temp*20
 c
@@ -255,9 +255,6 @@ c
       dimension filters(2, nfilter_wl, nbands), filtpars(nbands,npar), 
      *     filterid(nbands)
       dimension psf_file(nfilters), integrated_psf(nxny)
-c
-c
-c     dithers
 c
 c
 c     catalogues
@@ -347,19 +344,18 @@ c
       dhas      = 1
       old_style = 1
       noiseless = .false.
-      noiseless = .true.
       psf_add   = .true.
       ipc_add   = .true.
 c
 c     these are input by the user
 c
-      include_ktc        = 1
-      include_bg         = 1
-      include_cr         = 1
-      include_dark       = 0
-      include_latents    = 0
-      include_readnoise  = 1
-      include_non_linear = 1 
+c      include_ktc        = 1
+c      include_bg         = 1
+c      include_cr         = 1
+c      include_dark       = 0
+c      include_latents    = 0
+c      include_readnoise  = 1
+c      include_non_linear = 1 
 c
       if(dhas.eq.1) then
 c
@@ -435,6 +431,11 @@ c     Read dither position, the associated catalogue, detector
 c     and filter for this scene. The catalogue must have been
 c     already tailored to the detector area
 c
+      read(5,10) verbose
+ 10   format(i12)
+      print *, 'verbose = ', verbose
+      read(*,10) brain_dead_test
+      print *, 'brain_dead_test     ', brain_dead_test
       read(5,*,err=89) idither
  89   print *,'idither = ', idither
       read(5,*,err=90) cube_name
@@ -458,24 +459,28 @@ c
 c
 c     catalogues
 c
+      read(5,10) include_stars
+      print *,'include_stars                 ', include_stars
       read(5,9) star_catalogue
  9    format(a80)
+      read(5,*) nstar
+      read(5,10) include_galaxies
+      print *,'include_galaxies              ', include_galaxies
       read(5,9) galaxy_catalogue
+      read(5,*) ngal
+      read(5,10) include_cloned_galaxies
+      print *,'include_cloned_galaxies       ', include_cloned_galaxies
 c
 c     number of filters contained in source catalogues
 c
       read(5, *) filter_in_cat 
-      read(5, *) use_filter
+      print *,'number of filters in catalogue', filter_in_cat
+      read(5, *) icat_f
 c
 c     name of file containing background SED for observation date
 c
       read(5, 9) zodifile
       print 9, zodifile
-      read(5,10) verbose
- 10   format(i12)
-      print *, 'verbose = ', verbose
-      read(*,10) brain_dead_test
-      print *, 'brain_dead_test     ', brain_dead_test
 c
 c     aperture
       read(5,11) apername
@@ -495,11 +500,11 @@ c
       print 18, subarray
  18   format(' subarray is ',a15)
       read(5,10)  substrt1
-      print *, 'substrt1 ', substrt1
-      read(5,10)  substrt1
+      print *, 'substrt1 ', 'substrt1'
+      read(5,10)  substrt2
       print *, 'substrt2 ', substrt2
 
-      read(5,10) subsize1
+      read(5,10) 'subsize1'
       print *, 'subsize1 ', subsize1
       read(5,10) subsize2
       print *, 'subsize2 ', subsize2
@@ -534,21 +539,7 @@ c
       print *,'cr_mode                       ', cr_mode
       read(5,10) include_bg 
       print *,'include_bg                    ', include_bg
-      read(5,10) include_galaxies
-      print *,'include_galaxies              ',include_galaxies
-      read(5,10) include_cloned_galaxies
-      print *,'include_cloned_galaxies       ',include_cloned_galaxies
- 40   format(a80)
- 50   format(a30,2x,a80)
-      read(*, 10) filter_in_cat
-      print *,'number of filters in catalogue', filter_in_cat
-      read(5,10) icat_f
-      print *,'filter index in catalogue     ', icat_f
-      read(5,10) indx
-      print *,'filter index in filter list   ', indx
-      read(5,*) filter_id
-      print *,'filter_id                     ', filter_id
-
+c
 c
 c     print some confirmation values
 c
@@ -562,7 +553,6 @@ c
       end if
       print *, idither, ra0, dec0, new_ra, new_dec, dx,
      *     dy, sca_id, indx
-      cube_name           = 'lixo_cube.fits'
 c
 c=======================================================================
 c
@@ -1050,33 +1040,33 @@ c
 c     Read source catalogues 
 c
 c**************************************************************************
-      open(7,file = 'fake_objects.reg')
-      open(9,file = 'fake_objects_rd.reg')
-      open(8,file = 'fake_objects.cat')
+c      open(7,file = 'fake_objects.reg')
+c      open(9,file = 'fake_objects_rd.reg')
+c      open(8,file = 'fake_objects.cat')
 c
       if(verbose.gt.0) print *,'read catalogues'
-c      if(include_stars.gt.0) then 
-c         x0 = 0.0d0
-c         y0 = 0.0d0
-c         print 9327, subarray
-c 9327    format(a8)
-c         call read_star_catalogue(star_catalogue, nfilters, 
-c     &     subarray, colcornr, rowcornr, naxis1, naxis2,
-c     &     ra_ref, dec_ref, pa_degrees, x0, y0, osim_scale,
-c     &     sca_id, old_style, verbose)
-c         if(verbose.ge.2) print *,'read star catalogue', nstars
-c      end if
-c
-c      if(include_galaxies .eq. 1 .and. ngal .gt. 0) then 
-c
+      if(include_stars.gt.0 .and. nstars .gt. 0) then 
+         x0 = 0.0d0
+         y0 = 0.0d0
+         print 9327, subarray
+ 9327    format(a8)
+         call read_star_catalogue(star_catalogue, nfilters, 
+     &     subarray, colcornr, rowcornr, naxis1, naxis2,
+     &     ra_ref, dec_ref, pa_degrees, x0, y0, osim_scale,
+     &     sca_id, old_style, verbose)
+         if(verbose.ge.2) print *,'read star catalogue', nstars
+      end if
+
+      if(include_galaxies .eq. 1 .and. ngal .gt. 0) then 
+
       call read_fake_mag_cat(galaxy_catalogue, cat_filter, 
-     &     filter_in_cat, use_filter, ngal)
-      print *,'nf, ngal', filter_in_cat, use_filter, ngal
-c     end if
+     &     filter_in_cat, icat_f, ngal)
+      print *,'nf, ngal', filter_in_cat, icat_f, ngal
+     end if
       if(verbose.ge.2) then
-         do i = 1, 10,2
+         do i = 1, 10, 2
             print * ,ra_galaxies(i), dec_galaxies(i),
-     &           magnitude(i,use_filter)
+     &           magnitude(i, icat_f)
             
          end do
       end if
