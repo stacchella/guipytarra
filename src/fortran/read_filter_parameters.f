@@ -108,8 +108,6 @@ c
          do ll = 1, len
             read(3,300) filters(1, ll,nf), filters(2,ll,nf)
          end do
-         print *, 'print here nf = ', nf
-         print *, 'filters(1, 10, nf) = ', filters(1, 10, nf)
          close(3)
       end do
  200  close(1)

@@ -556,11 +556,7 @@ c
 c     read filter parameters
 c
       call read_filter_parameters(nf_used, verbose)
-c     
-      print *,'filters(1, 10, 1)', filters(1, 10, 1)
-      print *,'filters(1, 10, 3)', filters(1, 10, 3)
-      print *,'filters(1, 10, 10)', filters(1, 10, 10)
-      print *,'filters(1, 10, indx)', filters(1, 10, indx)
+c
 c
 c     read list of fits filenames of point-spread-function
 c
@@ -585,10 +581,6 @@ c      filter_id           = temp(1:5)
 c
       readnoise           = read_noise_cv3(sca_id-480)
       print *,'readnoise ', readnoise
-      print *,'filters(1, 10, 1)', filters(1, 10, 1)
-      print *,'filters(1, 10, 3)', filters(1, 10, 3)
-      print *,'filters(1, 10, 10)', filters(1, 10, 10)
-      print *,'filters(1, 10, indx)', filters(1, 10, indx)
 c
 c     these need to be calculated from the APERTURE position
 c     and PA (e.g, from B.Hilberts python script)
