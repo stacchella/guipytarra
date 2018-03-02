@@ -463,7 +463,7 @@ c
       print *,'include_stars                 ', include_stars
       read(5,9) star_catalogue
  9    format(a80)
-      read(5,*) nstar
+      read(5,*) nstars
       read(5,10) include_galaxies
       print *,'include_galaxies              ', include_galaxies
       read(5,9) galaxy_catalogue
