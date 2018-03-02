@@ -580,10 +580,10 @@ c      filter_id           = temp(1:5)
 c
       readnoise           = read_noise_cv3(sca_id-480)
       print *,'readnoise ', readnoise
-      print *,'filters(1, 0, 1)', filters(1, 0, 1)
-      print *,'filters(1, 0, 3)', filters(1, 0, 3)
-      print *,'filters(1, 0, 10)', filters(1, 0, 10)
-      print *,'filters(1, 0, indx)', filters(1, 0, indx)
+      print *,'filters(1, 1, 1)', filters(1, 0, 1)
+      print *,'filters(1, 1, 3)', filters(1, 0, 3)
+      print *,'filters(1, 1, 10)', filters(1, 0, 10)
+      print *,'filters(1, 1, indx)', filters(1, 0, indx)
 c
 c     these need to be calculated from the APERTURE position
 c     and PA (e.g, from B.Hilberts python script)
