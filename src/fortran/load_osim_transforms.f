@@ -26,8 +26,9 @@ c
      *     xavg_dir, xavg_inv, yavg_dir ,yavg_inv 
 c
       integer sca, debug, choice, i, ii, j,nn
-      character geomaps*30
+      character geomaps*180
       character path_guitarra*100
+
       dimension sca(10), geomaps(2)
 
       dimension xcorner(5), ycorner(5)
