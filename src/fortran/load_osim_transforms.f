@@ -44,9 +44,9 @@ c     modified 2018-02-02:
 c     to use the NIRCam flight solution from Renee Gracey's measurements.
 c
       call getenv('GUITARRA_HOME',path_guitarra)
-      data geomaps/path_guitarra(1:len_trim(path_guitarra)
+      data geomaps/path_guitarra(1:len_trim(path_guitarra))
      +   //'data/NIRCam_flight_transforms.dat',
-     +   path_guitarra(1:len_trim(path_guitarra)//'fake_transforms.dat'/
+     +   path_guitarra(1:len_trim(path_guitarra))//'fake_transforms.dat'/
       data xcorner /5.d0, 2044.d0, 2044.d0,    5.d0,    5.d0/
       data ycorner /5.d0,    5.d0, 2044.d0, 2044.d0,    5.d0/
 c
