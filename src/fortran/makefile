@@ -41,13 +41,11 @@ SOURCES = ab_mag_to_photon_flux.f \
 	coadd.f \
 	cr_distribution.f \
 	data_model_fits.f \
-	divide_frame.f \
 	find_sca_coords.f\
 	gain_per_amp.f \
 	gammain_bhattacharjee.f \
 	get_date.f \
 	getkeywords.f \
-	getfitsdata1d.f \
 	getfitsdata2d.f \
 	get_sca_id.f \
 	integration.f \
@@ -71,12 +69,10 @@ SOURCES = ab_mag_to_photon_flux.f \
 	ra_dec_to_sca.f \
 	ra_dec_xy_osim.f \
 	read_cr_matrix.f \
-	read_dithers.f \
 	read_fake_mag_cat.f \
 	read_filter_parameters.f \
 	read_fits.f \
 	read_funky_fits.f \
-	read_gclf.f \
 	read_jwst_background.f \
 	read_psf.f \
 	read_linearity.f \
@@ -91,7 +87,6 @@ SOURCES = ab_mag_to_photon_flux.f \
 	sca_boundaries.f \
 	sca_coords_from_osim.f \
 	sca_footprint.f \
-	sca_image.f \
 	sca_to_ra_dec.f \
 	set_params.f \
 	smooth.f \
@@ -100,7 +95,6 @@ SOURCES = ab_mag_to_photon_flux.f \
 	structural.f \
 	total_time.f \
 	ut_to_date_time.f \
-	wcs_keywords.f \
 	wcs_keywords_new.f \
 	write_2d.f \
 	write_float_2d_image.f \

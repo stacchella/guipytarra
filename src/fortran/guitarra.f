@@ -596,7 +596,7 @@ c
       mu_epoch  = 2000.d0
       prop_ra   = 0.0d0
       prop_dec  = 0.0d0
-      pa_v3     = pa_degrees    ! This comes from read_parameters
+      pa_v3     = pa_degrees    ! These come from the input file
       ra_ref    = ra0           ! RA of SCA centre
       dec_ref   = dec0          ! DEC of SCA centre
       roll_ref  = pa_degrees     ! how does this relate to PA_V3 ?
