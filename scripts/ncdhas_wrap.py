@@ -17,7 +17,7 @@ print os.environ['NCDHAS_PATH']
 # define file list name to reduce
 # -------------------------------
 
-file_name_list = ['/Users/sandrotacchella/ASTRO/JWST/img_simulator/test_arizona/sandro/sim_cube_F200W_481_001.fits']
+file_name_list = ['/Users/sandrotacchella/Desktop/sim_cube_F277W_490_001.fits']
 
 
 # ------------
@@ -26,10 +26,11 @@ file_name_list = ['/Users/sandrotacchella/ASTRO/JWST/img_simulator/test_arizona/
 
 # Sandro Laptop
 path_calibration_files = '../../../../../../Volumes/Tacchella/Work/Postdoc/JWST_GTO/cal/'
+ncdhas = '/Users/sandrotacchella/ASTRO/JWST/img_simulator/ncdhas-v2.0rev107/ncdhas '
 
 # Cluster
-path_calibration_files = 'TBD'
-
+#path_calibration_files = 'TBD'
+#ncdhas='TBD '
 
 # ----------------------------------
 # define reduction specific features
@@ -59,7 +60,7 @@ for ii in range(len(file_name_list)):
     print 'progress in %: ', 100.0*ii/len(file_name_list)
     hdu_list = fits.open(file_name_list[ii])
     sca_id = str(hdu_list[0].header['SCA_ID'])
-    command = 'ncdhas ' + file_name_list[ii] + ncdhas_flags + '+cp ' + path_calibration_files + ' -P ' + cfg_config[sca_id]
+    command = ncdhas + file_name_list[ii] + ncdhas_flags + '+cp ' + path_calibration_files + ' -P ' + cfg_config[sca_id]
     print 'executing... ', command
     os.system(command)
 

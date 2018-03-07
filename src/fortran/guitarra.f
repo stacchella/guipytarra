@@ -167,7 +167,7 @@ c
       integer   primary_position, primary_total, subpixel_position,
      &     subpixel_total 
       double precision ra0, dec0, new_ra, new_dec, dx, dy, pa_degrees
-      integer idither, indx, icat_f
+      integer idither, filter_index, icat_f
 c
 c     exposure 
 c     
@@ -261,10 +261,10 @@ c     catalogues
 c
 c      dimension cr_matrix(ncr,ncr,10000),cr_flux(10000),cr_accum(10000)
       dimension ra_stars(max_stars), dec_stars(max_stars),
-     *     mag_stars(max_stars ,nfilters), counts(max_stars)
+     *     mag_stars(max_stars, nfilters), counts(max_stars)
       dimension ra_galaxies(max_objects), dec_galaxies(max_objects), 
      *     z(max_objects),
-     *     magnitude(max_objects,nfilters), ncomponents(max_objects),
+     *     magnitude(max_objects, nfilters), ncomponents(max_objects),
      *     nsersic(max_objects, nsub), ellipticity(max_objects, nsub),
      *     re(max_objects, nsub), theta(max_objects, nsub), 
      *     flux_ratio(max_objects, nsub),
@@ -441,7 +441,7 @@ c
 c
 c     Index for filter
 c
-      read(5,*) indx
+      read(5,*) filter_index
 c
 c     catalogues
 c
@@ -552,7 +552,7 @@ c     print some confirmation values
 c
       print *, filter_in_cat 
       print *, idither, ra0, dec0, new_ra, new_dec, dx,
-     *     dy, sca_id, indx, icat_f
+     *     dy, sca_id, filter_index, icat_f
 c
       scale               =   0.0317d0
       if(sca_id .eq. 485 .or. sca_id .eq.490) then
@@ -563,7 +563,7 @@ c=======================================================================
 c
 c     read filter parameters
 c
-      call read_filter_parameters(indx, verbose)
+      call read_filter_parameters(filter_index, verbose)
 c
 c
 c     read list of fits filenames of point-spread-function
@@ -572,7 +572,7 @@ c
 c
 c=======================================================================
 c
-      j                   = indx
+      j                   = filter_index
       temp                = filterid(j)
       filter_id           = temp(8:12)
 c      filter_id           = temp(1:5)
@@ -620,7 +620,7 @@ c
 c     
 c     read zodiacal background
 c
-      call read_jwst_background(zodifile, indx, pixel,
+      call read_jwst_background(zodifile, filter_index, pixel,
      &     mirror_area, background)
 c
       if(scale.eq.0.0317d0.and.wavelength.gt.2.4d0) go to 999

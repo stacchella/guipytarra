@@ -42,7 +42,7 @@ run_params_in = {'verbose': 1,             # verbose (f.e. 1)
                  'dy': -27.79990000,          # DEC of pointing
                  # detector, filter and catalog input
                  'sca_id': 490,               # ID of SCA to use  (f.e. 487)
-                 'indx': 14,                  # index of filter in 'nircam_calib.list' and 'psf.list'  (f.e. 10 for F200W)
+                 'filter_index': 14,          # index of filter in 'nircam_calib.list' and 'psf.list'  (f.e. 10 for F200W)
                  'include_stars': False,      # include stars
                  'star_catalogue': 'none.cat',    # catalog of stars, see below (f.e. none_487_090.cat)
                  'include_galaxies': True,    # include galaxies
