@@ -563,7 +563,7 @@ c=======================================================================
 c
 c     read filter parameters
 c
-      call read_filter_parameters(filter_index, verbose)
+      call read_filter_parameters(verbose)
 c
 c
 c     read list of fits filenames of point-spread-function
