@@ -4,7 +4,7 @@ c     semi major, semi minor, theta, list of mags
 c
       subroutine read_galaxy_cat(filename, filters_in_cat)
       implicit none
-      double precision ra, dec, z, magnitude, nsersic,
+      double precision ra_galaxies, dec_galaxy, z, magnitude, nsersic,
      *     ellipticity, re, theta, flux_ratio
       double precision tra, tdec, tz, tmagnitude, tnsersic,
      *     ttheta, tlambda, semi_major, semi_minor,
