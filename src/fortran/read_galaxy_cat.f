@@ -45,7 +45,7 @@ c
          print *,'skipping '
          print 40, l, tra, tdec, tmagnitude,
      *        tz, semi_major, semi_minor, ttheta, tnsersic,
-     *        (abmag(j), j = 1, filters_in_cat)
+     *        (abmag(j), j=1, filters_in_cat)
  40      format(i8,20(1x,f15.6))
          go to 90
  50      continue
