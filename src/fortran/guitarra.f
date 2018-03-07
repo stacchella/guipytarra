@@ -293,7 +293,8 @@ c
      *     dark_mean, dark_sigma, ktc, voltage_offset 
 c
       common /galaxy/ra_galaxies, dec_galaxies, z, magnitude,
-     *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents, ngal
+     *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents,
+     *     ngal
 c
       common /wcs/ equinox, 
      *     crpix1, crpix2,      ! crpix3,
