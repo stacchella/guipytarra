@@ -132,6 +132,7 @@ c
       double precision ra_galaxies, dec_galaxies, 
      *     z, magnitude, nsersic, ellipticity,
      *     re, theta, flux_ratio
+      integer id
       integer max_stars, max_objects, nsub, ncomponents, nstars, ngal
       character clone_path*180, star_catalogue*180, galaxy_catalogue*180
 c
