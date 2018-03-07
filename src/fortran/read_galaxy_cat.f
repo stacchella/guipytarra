@@ -12,7 +12,7 @@ c
      *     abmag
 c
       integer max_objects, nfilters, nsub, indx
-      integer ngal, ncomponents,i, j, nc, l, filters_in_cat, id
+      integer ngal, ncomponents, i, j, nc, l, filters_in_cat, id
 c
       character filename*180,line*100
 c     
@@ -26,7 +26,7 @@ c
      *     id(max_objects)
 c     
       common /galaxy/ra, dec, z, magnitude, nsersic, ellipticity, re,
-     *     theta, flux_ratio, ncomponents, id
+     *     theta, flux_ratio, ncomponents, id, ngal
 c
       q = dacos(-1.0d0)/180.d0
 c

@@ -292,7 +292,7 @@ c
      *     decay_rate, time_since_previous, read_noise, 
      *     dark_mean, dark_sigma, ktc, voltage_offset 
 c
-      common /galaxy/ra_galaxies, dec_galaxies, z, magnitude, 
+      common /galaxy/ra_galaxies, dec_galaxies, z, magnitude, ngal
      *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents
 c
       common /wcs/ equinox, 
