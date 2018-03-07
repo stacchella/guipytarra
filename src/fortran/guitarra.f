@@ -215,6 +215,7 @@ c
       integer include_bg, include_cr,  include_dark, include_ktc, 
      *     include_latents, include_non_linear, include_readnoise, 
      *     include_reference, include_1_over_f, brain_dead_test
+      integer ipc_add_option, noiseless_option, psf_add_option
       logical ipc_add
       integer cr_mode
       integer include_stars, include_galaxies, include_cloned_galaxies
