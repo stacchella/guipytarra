@@ -1035,7 +1035,7 @@ c
          y0 = 0.0d0
          print 9327, subarray
  9327    format(a8)
-         call read_star_cat(star_catalogue, filter_in_cat, verbose)
+         call read_star_cat(star_catalogue, filter_in_cat)
          print *,'read star catalogue: ', nstars
       end if
 c
