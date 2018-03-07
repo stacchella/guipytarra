@@ -37,7 +37,7 @@ c
      *     flux_ratio(max_objects, nsub)
 c
       common /galaxy/ra, dec, z, magnitude, nsersic, ellipticity, re,
-     *     theta, flux_ratio, ncomponents,id
+     *     theta, flux_ratio, ncomponents, id
 c
 c      mag    =   0.0d0
 c      photons = ab_mag_to_photon_flux (mag, mirror_area,
