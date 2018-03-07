@@ -4,7 +4,7 @@ c
       subroutine add_modelled_galaxy(sca_id,
      *     ra_dithered, dec_dithered, pa_degrees,
      *     xc, yc, osim_scale, filter_index, 
-     *     ngal, scale, 
+     *     scale, 
      *     wavelength, bandwidth, system_transmission, 
      *     mirror_area, integration_time, seed, 
      *     noiseless, psf_add, ipc_add,debug)
@@ -12,7 +12,7 @@ c
       implicit none
       double precision ra_dithered, dec_dithered, pa_degrees,
      *     xc, yc, osim_scale
-      double precision xg, yg, ra, dec,
+      double precision xg, yg, ra_galaxies, dec_galaxies,
      *     magnitude, ellipticity, theta, re, nsersic,flux_ratio,
      *     z, scale, 
      *     wavelength, bandwidth, system_transmission, 
@@ -25,7 +25,7 @@ c
 c
       integer max_objects, nnn, nsub, nfilters
       integer ix, iy, seed, debug, ngal, ng,
-     *     ncomponents,id, i, j, nc, sca_id, filter_index, junk
+     *     ncomponents, id, i, j, nc, sca_id, filter_index, junk
       logical noiseless, psf_add, ipc_add
 c
       parameter (max_objects=50000, nnn = 2048, nfilters=54, nsub=4)

@@ -268,7 +268,7 @@ c     [e-]
                   call add_modelled_galaxy(sca_id,
      *                 ra_dithered, dec_dithered, pa_degrees,
      *                 xc, yc, osim_scale, icat_f,
-     *                 ngal, scale,
+     *                 scale,
      *                 wavelength, bandwidth, system_transmission, 
      *                 mirror_area, tframe, seed,
      &                 noiseless, psf_add, ipc_add, verbose)
