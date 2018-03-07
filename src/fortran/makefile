@@ -70,7 +70,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	ra_dec_to_sca.f \
 	ra_dec_xy_osim.f \
 	read_cr_matrix.f \
-	read_fake_mag_cat.f \
+	read_galaxy_cat.f \
 	read_filter_parameters.f \
 	read_fits.f \
 	read_funky_fits.f \
@@ -81,7 +81,7 @@ SOURCES = ab_mag_to_photon_flux.f \
 	read_psf_fits.f \
 	read_sca_calib.f \
 	read_sca_wcs.f \
-	read_star_catalogue.f \
+	read_star_cat.f \
 	resample.f \
 	rotate_coords.f \
 	sca_boundaries.f \

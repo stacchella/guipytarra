@@ -6,7 +6,7 @@ c
      *     xc, yc, osim_scale, filter_index, 
      *     ngal, scale, 
      *     wavelength, bandwidth, system_transmission, 
-     *     mirror_area, integration_time, seed, in_field, 
+     *     mirror_area, integration_time, seed, 
      *     noiseless, psf_add, ipc_add,debug)
 
       implicit none
@@ -24,7 +24,7 @@ c
       double precision ab_mag_to_photon_flux
 c
       integer max_objects, nnn, nsub, nfilters
-      integer ix, iy, seed, debug, ngal, ng,in_field,
+      integer ix, iy, seed, debug, ngal, ng,
      *     ncomponents,id, i, j, nc, sca_id, filter_index, junk
       logical noiseless, psf_add, ipc_add
 c
@@ -44,7 +44,6 @@ c      photons = ab_mag_to_photon_flux (mag, mirror_area,
 c     *     wavelength, bandwidth, system_transmission)
 c      zp  =photons
 c      mzp = -2.5d0*dlog10(zp)
-      in_field = 0
       zp   = 0.0d0
 c      if(debug.eq.1) 
 c     *     print *,'add_modelled_galaxy: ZP ', zp
@@ -64,7 +63,7 @@ c
          call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
      *        ra(ng), dec(ng), pa_degrees, 
-     *        xc, yc,  osim_scale, xg, yg)
+     *        xc, yc, osim_scale, xg, yg)
          if(debug.gt.1) print *, 'add_modelled_galaxy',
      &        ra(ng), dec(ng), xg, yg, 
      &        magnitude(ng,filter_index), filter_index
@@ -125,7 +124,6 @@ c
      *           mirror_area, integration_time,seed,
      *           noiseless, psf_add, ipc_add, debug)
          end do
-         in_field = in_field +1
  200     continue
       end do
       return

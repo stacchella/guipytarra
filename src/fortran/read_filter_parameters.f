@@ -12,7 +12,7 @@ c
      *     system_transmission
       double precision filters, filtpars
 c
-      integer nnn, mmm, lll, npar, nfilters, i, nf,l, ll, len, nf_used,
+      integer nnn, mmm, lll, npar, nfilters, i, nf,l, ll, len,
      &     verbose
 c
       character filterid*20, tempfile*80

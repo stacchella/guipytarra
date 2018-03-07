@@ -63,11 +63,11 @@ def setup_input_file(parameter_dictionary):
     """
     # parameter file that is conveyed in batch mode
     list_parameters = ['verbose', 'brain_dead_test', 'idither', 'filename', 'noise_name', 'ra0', 'dec0', 'new_ra', 'new_dec',
-                       'dx', 'dy', 'sca_id', 'indx', 'include_stars', 'star_catalogue', 'nstars', 'include_galaxies',
-                       'galaxy_catalogue', 'ngal', 'include_cloned_galaxies', 'filter_in_cat', 'icat_f', 'zodifile',
+                       'dx', 'dy', 'sca_id', 'indx', 'include_stars', 'star_catalogue', 'include_galaxies',
+                       'galaxy_catalogue', 'include_cloned_galaxies', 'filter_in_cat', 'icat_f', 'zodifile',
                        'apername', 'readpatt', 'ngroups', 'subarray', 'substrt1', 'substrt2', 'subsize1', 'subsize2',
-                       'pa_degrees', 'include_ktc', 'include_dark', 'include_readnoise', 'include_reference',
-                       'include_non_linear', 'include_latents', 'include_1_over_f', 'include_cr', 'cr_mode', 'include_bg']
+                       'pa_degrees', 'noiseless', 'psf_add', 'ipc_add', 'include_ktc', 'include_dark', 'include_readnoise',
+                       'include_reference', 'include_non_linear', 'include_latents', 'include_1_over_f', 'include_cr', 'cr_mode', 'include_bg']
     file_batch = open(parameter_dictionary['filename_param'], 'w')
     for ii_key in list_parameters:
         file_batch.write(convert_str(parameter_dictionary[ii_key]) + '\n')

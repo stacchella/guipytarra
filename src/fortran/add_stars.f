@@ -2,7 +2,7 @@
      *     xc, yc, osim_scale, sca_id, filter_index,
      *     seed, subarray, colcornr, rowcornr, naxis1, naxis2,
      *     wavelength, bandwidth,system_transmission,
-     *     mirror_area, integration_time, in_field, 
+     *     mirror_area, integration_time, 
      *     noiseless, psf_add, ipc_add, verbose)
 c
 c     Add "stars" to an image. The NIRCam footprint is centered at
@@ -14,7 +14,7 @@ c
       double precision ra_stars, dec_stars, mag_stars
       double precision rra, ddec, rra_pix, ddec_pix
       double precision intensity, total_per_cycle, stellar_photons,
-     *     x_sca, y_sca, xx, yy, xhit, yhit, x_osim, y_osim
+     *     xs, ys, xx, yy, xhit, yhit, x_osim, y_osim
       double precision ab_mag_to_photon_flux, zbqlnor
       double precision mirror_area, wavelength, bandwidth,
      *     system_transmission, integration_time
@@ -24,8 +24,7 @@ c
       integer expected, zbqlpoi
       integer colcornr, rowcornr, naxis1, naxis2, filter_index
       integer verbose, sca_id, nnn, max_stars, nfilters, ix, iy,
-     *     i, j, nstars, ixmin, ixmax, iymin, iymax, seed, invert,
-     *     in_field
+     *     i, j, nstars, ixmin, ixmax, iymin, iymax, seed, invert
 c
       character subarray*8
       logical noiseless, psf_add, ipc_add
@@ -57,27 +56,18 @@ c
 c
       xhit     = 0.0d0
       xhit     = 0.0d0
-      in_field = 0
       do  i = 1, nstars
 c
 c     find SCA coordinates for this object 
 c
-c         call ra_dec_to_sca(sca_id, 
-c     *        ra_dithered, dec_dithered, 
-c     *        ra_stars(i), dec_stars(i), pa_degrees, 
-c     *        xc, yc,  osim_scale, x_sca, y_sca)
-c         if(verbose.gt.2) then
-c            print *,'add_stars: ixmin, ixmax, iymin,iymax, x_sca,y_sca',
-c     &           ixmin, ixmax, iymin,iymax, x_sca,y_sca
-c         end if
-         x_sca = ra_stars(i)
-         y_sca = dec_stars(i)
-cc     
-cc     verify that star is contained within field
-cc     (could be done later for objects at the edges)
-cc
-c         if(x_sca.lt.ixmin .or. x_sca.gt.ixmax) go to 100
-c         if(y_sca.lt.iymin .or. y_sca.gt.iymax) go to 100
+         call ra_dec_to_sca(sca_id, 
+     *        ra_dithered, dec_dithered, 
+     *        ra_stars(i), dec_stars(i), pa_degrees, 
+     *        xc, yc,  osim_scale, xs, ys)
+         if(verbose.gt.2) then
+            print *,'add_stars: ixmin, ixmax, iymin, iymax, xs, ys',
+     &           ixmin, ixmax, iymin, iymax, xs, ys
+         end if
 c
 c     calculate the number of photo-electrons per second
 c     (system_transmission contains the quantum efficiency term)
@@ -99,11 +89,11 @@ c
         else
            expected = zbqlpoi(total_per_cycle)
         end if
-c     write(17, 10) ra_stars(i), dec_stars(i), x_sca,  y_sca,
+c     write(17, 10) ra_stars(i), dec_stars(i), xs, ys,
 c     *           mag_stars(i,filter_index), stellar_photons,
 c     *           total_per_cycle, expected
         if(verbose.gt.1) then
-            print 10, ra_stars(i), dec_stars(i), x_sca,  y_sca,
+            print 10, ra_stars(i), dec_stars(i), xs, ys,
      *          mag_stars(i,filter_index), stellar_photons,
      *          total_per_cycle, expected
  10         format('add_stars ', 4(1x,f12.6), f8.3, 
@@ -114,8 +104,8 @@ c     *           total_per_cycle, expected
                if(psf_add .eqv. .true.) 
      &              call psf_convolve(seed, xhit, yhit)
 c     
-               ix = idnint(x_sca - xhit)
-               iy = idnint(y_sca - yhit)
+               ix = idnint(xs - xhit)
+               iy = idnint(ys - yhit)
 c
 c     add this photo-electron
 c     
@@ -131,7 +121,6 @@ c                  PRINT *, 'ADD IPC ', IX, IY
                end if
             end do
          end if
-         in_field = in_field + 1
  100     continue
       end do
       return

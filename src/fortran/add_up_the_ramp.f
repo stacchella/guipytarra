@@ -88,7 +88,7 @@ c
      &     brain_dead_test, include_1_over_f, include_reference
 
       integer i, j, k, loop, nlx, nly, level
-      integer nnn, nstars, ngal, in_field
+      integer nnn, nstars, ngal
       character filename*120, latent_file*120, psf_file*120,
      &     noise_name*120
       character object*20, partname*5, module*1, filter_id*5
@@ -253,10 +253,10 @@ c     [e-]
      *                 xc, yc, osim_scale, sca_id, filter_index, seed,
      *                 subarray, colcornr, rowcornr, naxis1, naxis2,
      *                 wavelength, bandwidth,system_transmission,
-     *                 mirror_area,tframe, in_field, 
+     *                 mirror_area, tframe, 
      *                 noiseless, psf_add, ipc_add, verbose)
                   if(verbose.ge.2) then
-                     print *, 'added ',in_field, ' stars of ', nstars
+                     print *, 'sca_image: added ', nstars, ' stars'
                   end if
                end if
 c     
@@ -270,11 +270,10 @@ c     [e-]
      *                 xc, yc, osim_scale, icat_f,
      *                 ngal, scale,
      *                 wavelength, bandwidth, system_transmission, 
-     *                 mirror_area, tframe, seed, in_field,
-     &                 noiseless, psf_add, ipc_add,verbose)
+     *                 mirror_area, tframe, seed,
+     &                 noiseless, psf_add, ipc_add, verbose)
                   if(verbose.ge.2) then
-                     print *, 'sca_image: added', in_field,
-     &                    ' galaxies of ',ngal
+                     print *, 'sca_image: added', ngal, ' galaxies'
                   end if
                end if
 c     

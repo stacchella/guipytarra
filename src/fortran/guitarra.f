@@ -187,7 +187,7 @@ c
       double precision filters, filtpars
       double precision photplam, photflam, f_nu, stmag, abmag
       integer nfilter_wl, nbands, npar, nfilters,
-     &     filter_in_cat, nf_used, nf, filter_index, cat_filter
+     &     filter_in_cat, nf, filter_index
       character filterid*20, temp*20
 c
 c     image-related
@@ -218,7 +218,6 @@ c
       logical ipc_add
       integer cr_mode
       integer include_stars, include_galaxies, include_cloned_galaxies
-      integer old_style
       character subarray*15,
      &     primary*16, subpixel*16, comment*40
 c
@@ -250,7 +249,7 @@ c
 c
 c     filter parameters, average responses from filters
 c
-      dimension bkg(nfilters),cat_filter(nfilters)
+      dimension bkg(nfilters)
 c
       dimension filters(2, nfilter_wl, nbands), filtpars(nbands,npar), 
      *     filterid(nbands)
@@ -339,23 +338,9 @@ c
 c     mirror area from JDOX
 c
       mirror_area = 25.4d0 * 1.0D4 
-      wcsaxes = 2
+      wcsaxes   = 2
       job       = 1000
       dhas      = 1
-      old_style = 1
-      noiseless = .false.
-      psf_add   = .true.
-      ipc_add   = .true.
-c
-c     these are input by the user
-c
-c      include_ktc        = 1
-c      include_bg         = 1
-c      include_cr         = 1
-c      include_dark       = 0
-c      include_latents    = 0
-c      include_readnoise  = 1
-c      include_non_linear = 1 
 c
       if(dhas.eq.1) then
 c
@@ -463,11 +448,9 @@ c
       print *, 'include_stars                ', include_stars
       read(5,9) star_catalogue
  9    format(a80)
-      read(5,*) nstars
       read(5,10) include_galaxies
       print *, 'include_galaxies             ', include_galaxies
       read(5,9) galaxy_catalogue
-      read(5,*) ngal
       read(5,10) include_cloned_galaxies
       print *, 'include_cloned_galaxies      ', include_cloned_galaxies
 c
@@ -518,6 +501,30 @@ c
 c
 c     noise to include
 c
+      read(5,10) noiseless_option
+      print *,'run noiseless mode:           ', noiseless_option
+      if(noiseless_option .eq. 1) then
+         noiseless = .true.
+      else
+         noiseless = .false.
+      end if
+c
+      read(5,10) psf_add_option
+      print *,'add PSF:                      ', psf_add_option
+      if(psf_add_option .eq. 1) then
+         psf_add = .true.
+      else
+         psf_add = .false.
+      end if
+c
+      read(5,10) ipc_add_option
+      print *,'add ipc:                      ', ipc_add_option
+      if(ipc_add_option .eq. 1) then
+         ipc_add = .true.
+      else
+         ipc_add = .false.
+      end if
+c
       read(5,10) include_ktc
       print *,'include_ktc                   ', include_ktc
       read(5,10) include_dark
@@ -555,7 +562,7 @@ c=======================================================================
 c
 c     read filter parameters
 c
-      call read_filter_parameters(nf_used, verbose)
+      call read_filter_parameters(indx, verbose)
 c
 c
 c     read list of fits filenames of point-spread-function
@@ -601,10 +608,6 @@ c
 
 c     Angle from V3 axis to Ideal Y axis (degrees)
       v3i_yang = -0.08954d0     ! Is is a constant??
-c     
-c     use appropriate column of object catalogue
-c
-c      icat_f              = cat_filter(indx)
 c     
 c     use appropriate filters for SW/LW
 c     
@@ -662,7 +665,7 @@ c
       if(dhas.eq.1) then
          nints = 1
       else
-         nints     =   2
+         nints = 2
       end if
 
 c
@@ -675,22 +678,7 @@ c     read parameters that will be used for the WCS header
 c     ra_sca, dec_sca are read from the catalogue file for now
 c
       print *,' verbose ', verbose
-c      if(old_style.eq.1) then 
       call load_osim_transforms(verbose)
-c      i = 10
-c      print *, xshift(i), yshift(i), xmag(i), ymag(i),
-c     *     xrot(i), yrot(i)
-c      print *, oxshift(i), oyshift(i), oxmag(i), oymag(i),
-c     *     oxrot(i), oyrot(i)
-c      else
-c         call read_sca_wcs(sca_id, 
-c     &        x_sci_ref, y_sci_ref, x_sci_scale, y_sci_scale,
-c     &        v2_ref, v3_ref, vparity, v3i_yang)
-c         call wcs_keywords_new(sca_id, ra_sca, dec_sca, 
-c     &        x_sci_ref, y_sci_ref, x_sci_scale, y_sci_scale,
-c     &        v3i_yang, pa_degrees, 2)
-c      end if
-c
 c
 c======================================================================
 c     Official FITS keywords 
@@ -1038,35 +1026,21 @@ c
 c     Read source catalogues 
 c
 c**************************************************************************
-c      open(7,file = 'fake_objects.reg')
-c      open(9,file = 'fake_objects_rd.reg')
-c      open(8,file = 'fake_objects.cat')
 c
       if(verbose.gt.0) print *,'read catalogues'
-      if(include_stars.gt.0 .and. nstars .gt. 0) then 
+c
+      if(include_stars.gt.0) then 
          x0 = 0.0d0
          y0 = 0.0d0
          print 9327, subarray
  9327    format(a8)
-         call read_star_catalogue(star_catalogue, nfilters, 
-     &     subarray, colcornr, rowcornr, naxis1, naxis2,
-     &     ra_ref, dec_ref, pa_degrees, x0, y0, osim_scale,
-     &     sca_id, old_style, verbose)
-         if(verbose.ge.2) print *,'read star catalogue', nstars
+         call read_star_cat(star_catalogue, filter_in_cat, verbose)
+         print *,'read star catalogue', nstars
       end if
-
-      if(include_galaxies .eq. 1 .and. ngal .gt. 0) then 
-
-        call read_fake_mag_cat(galaxy_catalogue, cat_filter, 
-     &     filter_in_cat, icat_f, ngal)
-        print *,'nf, ngal', filter_in_cat, icat_f, ngal
-      end if
-      if(verbose.ge.2) then
-         do i = 1, 10, 2
-            print * ,ra_galaxies(i), dec_galaxies(i),
-     &           magnitude(i, icat_f)
-            
-         end do
+c
+      if(include_galaxies .eq. 1) then 
+        call read_galaxy_cat(galaxy_catalogue, filter_in_cat)
+        print *,'read galaxy catalogue: ', ngal
       end if
 c
 c=======================================================================
@@ -1183,28 +1157,6 @@ c
      *     background, icat_f,filter_index, psf_file(j), 
      *     over_sampling_rate, noiseless, psf_add,
      *     ipc_add, verbose)
-
-c      call sca_image(idither, dx(idither), dy(idither),
-c     &     pa_degrees,
-c     &     cube_name, noise_name,
-c     *     sca_id, module, brain_dead_test,
-c     *     xc, yc, osim_scale, scale,
-c     *     include_ktc, include_dark, include_readnoise, 
-c     &     include_reference,
-c     *     include_1_over_f, include_latents, 
-c     *     include_non_linear, include_cr, cr_mode, include_bg,
-c     *     include_stars, include_galaxies, nstars, ngal,
-c     *     bitpix, ngroups, nframe, nskip, tframe, tgroup,
-c     *     object, subarray, colcornr, rowcornr, 
-c     *     naxis1, naxis2,
-c     *     filter_id, wavelength, bandwidth, 
-c     *     system_transmission,
-c     *     photplam, photflam, stmag, abmag,
-c     *     background, icat_f,j, 
-c     *     psf_file(j), over_sampling_rate,
-c     *     noiseless, psf_add, ipc_add, verbose)
-
-
 c
 c     This ensures that bitpix will be 16 and bzero=32K, bscale = 1
 c     for unsigned integers
