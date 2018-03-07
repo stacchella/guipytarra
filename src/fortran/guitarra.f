@@ -294,7 +294,7 @@ c
 c
       common /galaxy/ra_galaxies, dec_galaxies, z, magnitude,
      *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents,
-     *     ngal
+     *     id, ngal
 c
       common /wcs/ equinox, 
      *     crpix1, crpix2,      ! crpix3,

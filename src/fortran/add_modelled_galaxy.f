@@ -29,15 +29,16 @@ c
       logical noiseless, psf_add, ipc_add
 c
       parameter (max_objects=50000, nnn = 2048, nfilters=54, nsub=4)
-      dimension ra(max_objects), dec(max_objects), z(max_objects),
-     *     magnitude(max_objects,nfilters), ncomponents(max_objects), 
-     *     id(max_objects),
+      dimension ra_galaxies(max_objects), dec_galaxies(max_objects), 
+     *     z(max_objects), magnitude(max_objects,nfilters),
+     *     ncomponents(max_objects), id(max_objects),
      *     nsersic(max_objects,nsub),ellipticity(max_objects,nsub), 
      *     re(max_objects, nsub), theta(max_objects,nsub),
      *     flux_ratio(max_objects, nsub)
 c
-      common /galaxy/ra, dec, z, magnitude, nsersic, ellipticity, re,
-     *     theta, flux_ratio, ncomponents, id
+      common /galaxy/ra_galaxies, dec_galaxies, z, magnitude,
+     *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents,
+     *     id, ngal
 c
 c      mag    =   0.0d0
 c      photons = ab_mag_to_photon_flux (mag, mirror_area,
@@ -62,14 +63,14 @@ c     find SCA coordinates for this object
 c
          call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
-     *        ra(ng), dec(ng), pa_degrees, 
+     *        ra_galaxies(ng), dec_galaxies(ng), pa_degrees, 
      *        xc, yc, osim_scale, xg, yg)
          if(debug.gt.1) print *, 'add_modelled_galaxy',
-     &        ra(ng), dec(ng), xg, yg, 
+     &        ra_galaxies(ng), dec_galaxies(ng), xg, yg, 
      &        magnitude(ng, filter_index), filter_index
          if(magnitude(ng, filter_index) .eq. 0.0d0) then
             print *, 'add modelled galaxy 0 magnitude !',
-     &           ng,  ra(ng), dec(ng), filter_index,
+     &           ng,  ra_galaxies(ng), dec_galaxies(ng), filter_index,
      &           magnitude(ng, filter_index)
             stop
          end if

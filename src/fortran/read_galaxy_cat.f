@@ -18,15 +18,17 @@ c
 c     
       parameter (max_objects=50000, nfilters=54, nsub=4)
 c     
-      dimension ra(max_objects), dec(max_objects), z(max_objects),
-     *     magnitude(max_objects,nfilters), ncomponents(max_objects), 
-     *     nsersic(max_objects,nsub),ellipticity(max_objects,nsub), 
+      dimension ra_galaxies(max_objects), dec_galaxies(max_objects), 
+     *     z(max_objects), magnitude(max_objects,nfilters),
+     *     ncomponents(max_objects), nsersic(max_objects,nsub),
+     *     ellipticity(max_objects,nsub), 
      *     re(max_objects, nsub), theta(max_objects,nsub),
      *     flux_ratio(max_objects, nsub), abmag(nfilters),
      *     id(max_objects)
 c     
-      common /galaxy/ra, dec, z, magnitude, nsersic, ellipticity, re,
-     *     theta, flux_ratio, ncomponents, id, ngal
+      common /galaxy/ra_galaxies, dec_galaxies, z, magnitude,
+     *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents,
+     *     id, ngal
 c
       q = dacos(-1.0d0)/180.d0
 c
@@ -66,8 +68,8 @@ c         if(tmagnitude.gt.25.d0) go to 90
 c
          ngal = ngal + 1
          id(ngal)           = l
-         ra(ngal)           = tra
-         dec(ngal)          = tdec
+         ra_galaxies(ngal)  = tra
+         dec_galaxies(ngal) = tdec
          z(ngal)            = tz
 c     axial_ratio = 1.d0-ellipticity
 c
