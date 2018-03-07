@@ -24,7 +24,7 @@ c
      *     include_reference,
      *     include_1_over_f, include_latents, include_non_linear,
      *     include_cr, cr_mode, include_bg,
-     *     include_stars, include_galaxies, nstars, ngal,
+     *     include_stars, include_galaxies,
      *     bitpix, ngroups, nframe, nskip, tframe, tgroup, object,
      *     nints,
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
@@ -88,7 +88,7 @@ c
      &     brain_dead_test, include_1_over_f, include_reference
 
       integer i, j, k, loop, nlx, nly, level
-      integer nnn, nstars, ngal
+      integer nnn
       character filename*120, latent_file*120, psf_file*120,
      &     noise_name*120
       character object*20, partname*5, module*1, filter_id*5
@@ -247,7 +247,7 @@ c     scene to which readout noise is added.
 c     
 c     add stars
 c     [e-]
-               if(include_stars.eq.1 .and. nstars.gt.0) then
+               if(include_stars.eq.1) then
                   if(verbose.ge.2) print *, 'sca_image: add_stars '
                   call add_stars(ra_dithered, dec_dithered,pa_degrees,
      *                 xc, yc, osim_scale, sca_id, filter_index, seed,
@@ -255,14 +255,11 @@ c     [e-]
      *                 wavelength, bandwidth,system_transmission,
      *                 mirror_area, tframe, 
      *                 noiseless, psf_add, ipc_add, verbose)
-                  if(verbose.ge.2) then
-                     print *, 'sca_image: added ', nstars, ' stars'
-                  end if
                end if
 c     
 c     add galaxies
 c     [e-]
-               if(include_galaxies .eq. 1 .and. ngal .gt. 0) then
+               if(include_galaxies .eq. 1) then
                   if(verbose.ge.2)print *, 'sca_image: add_galaxies',
      *                 wavelength, bandwidth, system_transmission
                   call add_modelled_galaxy(sca_id,
@@ -272,9 +269,6 @@ c     [e-]
      *                 wavelength, bandwidth, system_transmission, 
      *                 mirror_area, tframe, seed,
      &                 noiseless, psf_add, ipc_add, verbose)
-                  if(verbose.ge.2) then
-                     print *, 'sca_image: added', ngal, ' galaxies'
-                  end if
                end if
 c     
 c     add sky background [e-]

@@ -1036,7 +1036,7 @@ c
          print 9327, subarray
  9327    format(a8)
          call read_star_cat(star_catalogue, filter_in_cat, verbose)
-         print *,'read star catalogue', nstars
+         print *,'read star catalogue: ', nstars
       end if
 c
       if(include_galaxies .eq. 1) then 
@@ -1149,7 +1149,7 @@ c
      *     include_reference,
      *     include_1_over_f, include_latents, include_non_linear,
      *     include_cr, cr_mode, include_bg,
-     *     include_stars, include_galaxies, nstars, ngal,
+     *     include_stars, include_galaxies,
      *     bitpix, ngroups, nframes, nskip, tframe, tgroup, object,
      *     nints,
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
