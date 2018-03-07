@@ -167,7 +167,7 @@ c
       integer   primary_position, primary_total, subpixel_position,
      &     subpixel_total 
       double precision ra0, dec0, new_ra, new_dec, dx, dy, pa_degrees
-      integer idither, filter_index, icat_f
+      integer idither, icat_f
 c
 c     exposure 
 c     
@@ -584,7 +584,6 @@ c      filter_id           = temp(1:5)
       photflam            = filtpars(j,27)
       abmag               = filtpars(j,28)
       stmag               = filtpars(j,29)
-      filter_index        = j
       print *,'filter_index ', j, wavelength, bandwidth
 c
       readnoise           = read_noise_cv3(sca_id-480)
