@@ -4,7 +4,7 @@ c
       subroutine read_star_cat(star_catalogue, filters_in_cat)
 c     
       implicit none
-      integer filters_in_cat, max_stars, nstars, i, j, idstar, max_filters,
+      integer filters_in_cat, max_stars, nstars, i, j, idstar, nfilters,
      &     sca_id
       integer colcornr, rowcornr, naxis1, naxis2
       integer ixmin, ixmax, iymin,iymax
@@ -15,11 +15,11 @@ c
      &     osim_scale
       character star_catalogue*120
 c
-      parameter(max_stars=10000, max_filters = 54)
+      parameter(max_stars=10000, nfilters = 54)
 c
       dimension x_stars(max_stars), y_stars(max_stars), 
-     *     mag_stars(max_stars, max_filters)
-      dimension array(max_filters)
+     *     mag_stars(max_stars, nfilters)
+      dimension array(nfilters)
 c
       common /stars/ x_stars, y_stars, mag_stars, nstars
 c

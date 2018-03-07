@@ -224,7 +224,7 @@ c
 c
 c     define lengths
 c
-      parameter (nfilter_wl = 25000, nbands=200, npar=30,nfilters=54)
+      parameter (nfilter_wl = 25000, nbands=200, npar=30, nfilters=54)
       parameter(nnn=2048, max_nint=3, max_order=7)
       parameter (nxny=2048*2048)
       parameter(max_stars=10000)
