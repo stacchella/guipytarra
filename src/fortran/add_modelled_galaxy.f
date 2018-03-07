@@ -28,7 +28,7 @@ c
      *     ncomponents,id, i, j, nc, sca_id, filter_index, junk
       logical noiseless, psf_add, ipc_add
 c
-      parameter (max_objects=50000, nnn = 2048, nfilters=54,nsub=4)
+      parameter (max_objects=50000, nnn = 2048, nfilters=54, nsub=4)
       dimension ra(max_objects), dec(max_objects), z(max_objects),
      *     magnitude(max_objects,nfilters), ncomponents(max_objects), 
      *     id(max_objects),
@@ -66,11 +66,11 @@ c
      *        xc, yc, osim_scale, xg, yg)
          if(debug.gt.1) print *, 'add_modelled_galaxy',
      &        ra(ng), dec(ng), xg, yg, 
-     &        magnitude(ng,filter_index), filter_index
-         if(magnitude(ng,filter_index).eq.0.0d0) then
+     &        magnitude(ng, filter_index), filter_index
+         if(magnitude(ng, filter_index) .eq. 0.0d0) then
             print *, 'add modelled galaxy 0 magnitude !',
-     &           ng,  ra(ng), dec(ng),filter_index,
-     &           magnitude(ng,filter_index)
+     &           ng,  ra(ng), dec(ng), filter_index,
+     &           magnitude(ng, filter_index)
             stop
          end if
 c
@@ -108,7 +108,7 @@ c
 c     create profiles for each component and co-add
 c
          do nc = 1, ncomponents(ng)
-            mag = magnitude(ng,filter_index) 
+            mag = magnitude(ng, filter_index) 
      *           -2.5d0*dlog10(flux_ratio(ng,nc))
             if(debug.ge.2) then
                print 110, filter_index, ng, nc,

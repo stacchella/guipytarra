@@ -73,7 +73,7 @@ c     calculate the number of photo-electrons per second
 c     (system_transmission contains the quantum efficiency term)
 c
          stellar_photons = 
-     *        ab_mag_to_photon_flux(mag_stars(i,filter_index),
+     *        ab_mag_to_photon_flux(mag_stars(i, filter_index),
      *        mirror_area,  wavelength, bandwidth, system_transmission)
 c         print *,stellar_photons, integration_time, filter_index,
 c     *        mag_stars(i,filter_index), mirror_area
@@ -94,7 +94,7 @@ c     *           mag_stars(i,filter_index), stellar_photons,
 c     *           total_per_cycle, expected
         if(verbose.gt.1) then
             print 10, ra_stars(i), dec_stars(i), xs, ys,
-     *          mag_stars(i,filter_index), stellar_photons,
+     *          mag_stars(i, filter_index), stellar_photons,
      *          total_per_cycle, expected
  10         format('add_stars ', 4(1x,f12.6), f8.3, 
      *           2(2x,f12.2),2x,i10)

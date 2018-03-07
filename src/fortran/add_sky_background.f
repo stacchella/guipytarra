@@ -17,7 +17,7 @@ c
       integer zbqlpoi
       integer colcornr, rowcornr, naxis1, naxis2 
       integer nnn, istart, iend, jstart, jend, i, j, k, l, n_image_x,
-     *     n_image_y, filter_index, verbose
+     *     n_image_y, verbose
 c
       logical noiseless
 c

@@ -30,7 +30,7 @@ c
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
      *     filter_id, wavelength, bandwidth, system_transmission,
      *     mirror_area, photplam, photflam, stmag, abmag,
-     *     background, icat_f,filter_index, psf_file, 
+     *     background, icat_f, filter_index, psf_file, 
      *     over_sampling_rate, noiseless, psf_add,
      *     ipc_add, verbose)
       
