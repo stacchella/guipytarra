@@ -572,19 +572,18 @@ c
 c
 c=======================================================================
 c
-      j                   = filter_index
-      temp                = filterid(j)
+      temp                = filterid(filter_index)
       filter_id           = temp(8:12)
 c      filter_id           = temp(1:5)
-      wavelength          = filtpars(j,8) ! effective_wl_nircam(j)
-      bandwidth           = filtpars(j,18) ! width_nircam(j)
-      system_transmission = filtpars(j,16) 
-      photplam            = filtpars(j,10)
-      uresp               = filtpars(j,25)
-      photflam            = filtpars(j,27)
-      abmag               = filtpars(j,28)
-      stmag               = filtpars(j,29)
-      print *,'filter_index ', j, wavelength, bandwidth
+      wavelength          = filtpars(filter_index,8) ! effective_wl_nircam(j)
+      bandwidth           = filtpars(filter_index,18) ! width_nircam(j)
+      system_transmission = filtpars(filter_index,16) 
+      photplam            = filtpars(filter_index,10)
+      uresp               = filtpars(filter_index,25)
+      photflam            = filtpars(filter_index,27)
+      abmag               = filtpars(filter_index,28)
+      stmag               = filtpars(filter_index,29)
+      print *,'filter_index ', filter_index, wavelength, bandwidth
 c
       readnoise           = read_noise_cv3(sca_id-480)
       print *,'readnoise ', readnoise
@@ -625,8 +624,8 @@ c
       if(scale.eq.0.0317d0.and.wavelength.gt.2.4d0) go to 999
       if(scale.eq.0.0648d0.and.wavelength.lt.2.4d0) go to 999
 c     
-      print 92, sca_id, j, filter_id, scale, wavelength,
-     &     psf_file(j)
+      print 92, sca_id, filter_index, filter_id, scale, wavelength,
+     &     psf_file(filter_index)
  92   format('main:       sca',2x,i3,' filter ',i4,2x,a5,
      &     ' scale',2x,f6.4,' wavelength ',f7.4,
      &     2x,a50)
@@ -1154,7 +1153,7 @@ c
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
      *     filter_id, wavelength, bandwidth, system_transmission,
      *     mirror_area, photplam, photflam, stmag, abmag,
-     *     background, icat_f,filter_index, psf_file(j), 
+     *     background, icat_f,filter_index, psf_file(filter_index), 
      *     over_sampling_rate, noiseless, psf_add,
      *     ipc_add, verbose)
 c
