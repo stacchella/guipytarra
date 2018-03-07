@@ -45,10 +45,8 @@ run_params_in = {'verbose': 1,             # verbose (f.e. 1)
                  'indx': 14,                  # index of filter in 'nircam_calib.list' and 'psf.list'  (f.e. 10 for F200W)
                  'include_stars': False,      # include stars
                  'star_catalogue': 'none.cat',    # catalog of stars, see below (f.e. none_487_090.cat)
-                 'nstars': 0,                 # number of stars (f.e. 0)
                  'include_galaxies': True,    # include galaxies
                  'galaxy_catalogue': 'mock_2018_01_18_test_490_001.cat',  # catalog of galaxies, see below (f.e. mock_2017_11_03_487_090.cat)
-                 'ngal': 10,                  # number of galaxies (f.e. 10)
                  'include_cloned_galaxies': False,  # include cloned galaxies
                  'filter_in_cat': 8,          # number of filters contained in source catalogues
                  'icat_f': 5,                 # index of filter to use
