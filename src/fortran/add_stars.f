@@ -38,7 +38,7 @@ c
       common / gain_/ gain_image
       common /stars/ ra_stars, dec_stars, mag_stars, nstars
 
-      if (verbose .eq.1) then
+      if (verbose .gt. 1) then
          print *,'enter add_stars'
       end if
 c
@@ -67,7 +67,7 @@ c
      *        ra_dithered, dec_dithered, 
      *        ra_stars(i), dec_stars(i), pa_degrees, 
      *        xc, yc,  osim_scale, xs, ys)
-         if(verbose.gt.2) then
+         if(verbose.gt.1) then
             print *,'add_stars: ixmin, ixmax, iymin, iymax, xs, ys',
      &           ixmin, ixmax, iymin, iymax, xs, ys
          end if
