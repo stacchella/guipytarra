@@ -250,7 +250,7 @@ c     [e-]
                if(include_stars.eq.1) then
                   if(verbose.ge.2) print *, 'sca_image: add_stars '
                   call add_stars(ra_dithered, dec_dithered,pa_degrees,
-     *                 xc, yc, osim_scale, sca_id, filter_index, seed,
+     *                 xc, yc, osim_scale, sca_id, icat_f, seed,
      *                 subarray, colcornr, rowcornr, naxis1, naxis2,
      *                 wavelength, bandwidth,system_transmission,
      *                 mirror_area, tframe, 

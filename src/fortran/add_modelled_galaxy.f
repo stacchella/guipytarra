@@ -3,7 +3,7 @@ c-----------------------------------------------------------------------
 c
       subroutine add_modelled_galaxy(sca_id,
      *     ra_dithered, dec_dithered, pa_degrees,
-     *     xc, yc, osim_scale, filter_index, 
+     *     xc, yc, osim_scale, icat_f, 
      *     scale, 
      *     wavelength, bandwidth, system_transmission, 
      *     mirror_area, integration_time, seed, 
@@ -25,7 +25,7 @@ c
 c
       integer max_objects, nnn, nsub, nfilters
       integer ix, iy, seed, debug, ngal, ng,
-     *     ncomponents, id, i, j, nc, sca_id, filter_index, junk
+     *     ncomponents, id, i, j, nc, sca_id, icat_f, junk
       logical noiseless, psf_add, ipc_add
 c
       parameter (max_objects=50000, nnn = 2048, nfilters=54, nsub=4)
@@ -69,11 +69,11 @@ c
      *        xc, yc, osim_scale, xg, yg)
          if(debug.gt.1) print *, 'add_modelled_galaxy',
      &        ra_galaxies(ng), dec_galaxies(ng), xg, yg, 
-     &        magnitude(ng, filter_index), filter_index
-         if(magnitude(ng, filter_index) .eq. 0.0d0) then
+     &        magnitude(ng, icat_f), icat_f
+         if(magnitude(ng, icat_f) .eq. 0.0d0) then
             print *, 'add modelled galaxy 0 magnitude !',
-     &           ng,  ra_galaxies(ng), dec_galaxies(ng), filter_index,
-     &           magnitude(ng, filter_index)
+     &           ng,  ra_galaxies(ng), dec_galaxies(ng), icat_f,
+     &           magnitude(ng, icat_f)
             stop
          end if
 c
@@ -106,17 +106,17 @@ c
          if(debug.ge.2) print 100
  100     format('  nc nsersic      re    ellipticity  magnitude ',
      *        '  photons     expected')
-c         print *,'add_modelled_galaxy ', ng, filter_index
+c         print *,'add_modelled_galaxy ', ng, icat_f
 c     
 c     create profiles for each component and co-add
 c
          do nc = 1, ncomponents(ng)
-            mag = magnitude(ng, filter_index) 
+            mag = magnitude(ng, icat_f) 
      *           -2.5d0*dlog10(flux_ratio(ng,nc))
             if(debug.ge.2) then
-               print 110, filter_index, ng, nc,
-     &          magnitude(ng,filter_index),flux_ratio(ng,nc)
- 110           format('add_modelled_galaxy filter_index, ng, nc, mag',
+               print 110, icat_f, ng, nc,
+     &          magnitude(ng,icat_f),flux_ratio(ng,nc)
+ 110           format('add_modelled_galaxy icat_f, ng, nc, mag',
      &              3(2x,i6), 2(2x,f20.12))
             end if
             call add_galaxy_component(xg, yg, mag, id(ng),

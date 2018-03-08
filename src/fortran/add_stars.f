@@ -1,5 +1,5 @@
       subroutine add_stars(ra_dithered, dec_dithered, pa_degrees,
-     *     xc, yc, osim_scale, sca_id, filter_index,
+     *     xc, yc, osim_scale, sca_id, icat_f,
      *     seed, subarray, colcornr, rowcornr, naxis1, naxis2,
      *     wavelength, bandwidth,system_transmission,
      *     mirror_area, integration_time, 
@@ -22,7 +22,7 @@ c
       real gain_image
 c
       integer expected, zbqlpoi
-      integer colcornr, rowcornr, naxis1, naxis2, filter_index, junk
+      integer colcornr, rowcornr, naxis1, naxis2, icat_f, junk
       integer verbose, sca_id, nnn, max_stars, nfilters, ix, iy,
      *     i, j, nstars, ixmin, ixmax, iymin, iymax, seed, invert
 c
@@ -84,14 +84,14 @@ c     calculate the number of photo-electrons per second
 c     (system_transmission contains the quantum efficiency term)
 c
         print *, 'star mag: ', mag_stars
-        print *, 'filter_index: ', filter_index
-        print *, 'star mag: ', mag_stars(i, filter_index)
+        print *, 'icat_f: ', icat_f
+        print *, 'star mag: ', mag_stars(i, icat_f)
         print *, mirror_area,  wavelength, bandwidth
         stellar_photons = 
-     *        ab_mag_to_photon_flux(mag_stars(i, filter_index),
+     *        ab_mag_to_photon_flux(mag_stars(i, icat_f),
      *        mirror_area,  wavelength, bandwidth, system_transmission)
-        print *, stellar_photons, integration_time, filter_index,
-     *        mag_stars(i,filter_index), mirror_area
+        print *, stellar_photons, integration_time, icat_f,
+     *        mag_stars(i,icat_f), mirror_area
 c     
 c      Find expected number of photo-electrons
 c     
@@ -109,11 +109,11 @@ c
         end if
         print *, expected
 c     write(17, 10) ra_stars(i), dec_stars(i), xs, ys,
-c     *           mag_stars(i,filter_index), stellar_photons,
+c     *           mag_stars(i,icat_f), stellar_photons,
 c     *           total_per_cycle, expected
         if(verbose.gt.1) then
             print 10, ra_stars(i), dec_stars(i), xs, ys,
-     *          mag_stars(i, filter_index), stellar_photons,
+     *          mag_stars(i, icat_f), stellar_photons,
      *          total_per_cycle, expected
  10         format('add_stars ', 4(1x,f12.6), f8.3, 
      *           2(2x,f12.2),2x,i10)
