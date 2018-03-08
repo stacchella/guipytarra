@@ -56,7 +56,9 @@ c
       else
          junk = sca_id
       end if
-
+c
+      print *, 'adding now ', ngal, ' to the image!'
+c
       do ng = 1, ngal
 c
 c     find SCA coordinates for this object 
