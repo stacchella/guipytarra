@@ -70,6 +70,7 @@ c
 c     find SCA coordinates for this object 
 c
         print *, 'star RA, DEC: ', ra_stars(i), dec_stars(i)
+        print *, 'star mag: ', mag_stars(i, icat_f)
 c
         call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
@@ -83,31 +84,23 @@ c
 c     calculate the number of photo-electrons per second
 c     (system_transmission contains the quantum efficiency term)
 c
-        print *, 'star mag: ', mag_stars
-        print *, 'icat_f: ', icat_f
-        print *, 'star mag: ', mag_stars(i, icat_f)
-        print *, mirror_area,  wavelength, bandwidth
         stellar_photons = 
      *        ab_mag_to_photon_flux(mag_stars(i, icat_f),
      *        mirror_area,  wavelength, bandwidth, system_transmission)
-        print *, stellar_photons, integration_time, icat_f,
-     *        mag_stars(i,icat_f), mirror_area
+c        print *, stellar_photons, integration_time, icat_f,
+c     *        mag_stars(i,icat_f), mirror_area
 c     
 c      Find expected number of photo-electrons
 c     
         total_per_cycle = stellar_photons * integration_time
-        print *, integration_time
-        print *, total_per_cycle
 c     
 c     for noiseless
 c     
-        print *, noiseless
         if(noiseless .eqv. .true.) then
            expected = total_per_cycle !+ zbqlnor(0.0d0,0.5d0)
         else
            expected = zbqlpoi(total_per_cycle)
         end if
-        print *, expected
 c     write(17, 10) ra_stars(i), dec_stars(i), xs, ys,
 c     *           mag_stars(i,icat_f), stellar_photons,
 c     *           total_per_cycle, expected
