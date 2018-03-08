@@ -69,19 +69,21 @@ c
 c
 c     find SCA coordinates for this object 
 c
-         call ra_dec_to_sca(junk, 
+        print *, 'star RA, DEC: ', ra_stars(i), dec_stars(i)
+c
+        call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
      *        ra_stars(i), dec_stars(i), pa_degrees, 
      *        xc, yc,  osim_scale, xs, ys)
-         if(verbose.gt.1) then
+        if(verbose.gt.1) then
             print *,'add_stars: ixmin, ixmax, iymin, iymax, xs, ys',
      &           ixmin, ixmax, iymin, iymax, xs, ys
-         end if
+        end if
 c
 c     calculate the number of photo-electrons per second
 c     (system_transmission contains the quantum efficiency term)
 c
-         stellar_photons = 
+        stellar_photons = 
      *        ab_mag_to_photon_flux(mag_stars(i, filter_index),
      *        mirror_area,  wavelength, bandwidth, system_transmission)
 c         print *,stellar_photons, integration_time, filter_index,
@@ -89,7 +91,7 @@ c     *        mag_stars(i,filter_index), mirror_area
 c     
 c      Find expected number of photo-electrons
 c     
-         total_per_cycle = stellar_photons * integration_time
+        total_per_cycle = stellar_photons * integration_time
 c     
 c     for noiseless
 c     
@@ -107,8 +109,8 @@ c     *           total_per_cycle, expected
      *          total_per_cycle, expected
  10         format('add_stars ', 4(1x,f12.6), f8.3, 
      *           2(2x,f12.2),2x,i10)
-         end if
-         if(expected .gt.0 ) then
+        end if
+        if(expected .gt.0 ) then
             do j = 1, expected
                if(psf_add .eqv. .true.) 
      &              call psf_convolve(seed, xhit, yhit)
@@ -129,8 +131,8 @@ c
 c                  PRINT *, 'ADD IPC ', IX, IY
                end if
             end do
-         end if
- 100     continue
+        end if
+ 100    continue
       end do
       return
       end
