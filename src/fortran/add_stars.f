@@ -86,20 +86,24 @@ c
         stellar_photons = 
      *        ab_mag_to_photon_flux(mag_stars(i, filter_index),
      *        mirror_area,  wavelength, bandwidth, system_transmission)
-c         print *,stellar_photons, integration_time, filter_index,
-c     *        mag_stars(i,filter_index), mirror_area
+        print *, stellar_photons, integration_time, filter_index,
+     *        mag_stars(i,filter_index), mirror_area
 c     
 c      Find expected number of photo-electrons
 c     
         total_per_cycle = stellar_photons * integration_time
+        print *, integration_time
+        print *, total_per_cycle
 c     
 c     for noiseless
 c     
+        print *, noiseless
         if(noiseless .eqv. .true.) then
            expected = total_per_cycle !+ zbqlnor(0.0d0,0.5d0)
         else
            expected = zbqlpoi(total_per_cycle)
         end if
+        print *, expected
 c     write(17, 10) ra_stars(i), dec_stars(i), xs, ys,
 c     *           mag_stars(i,filter_index), stellar_photons,
 c     *           total_per_cycle, expected
