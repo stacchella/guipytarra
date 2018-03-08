@@ -26,9 +26,9 @@ c
       open(1,file=star_catalogue)
       nstars = 0
       do i = 1, max_stars
-         read(1, 110, end=1000) idstar, rra, ddec,
+         read(1, *, end=1000) idstar, rra, ddec,
      *        (array(j), j=1, filters_in_cat)
- 110     format(i5,2(2x, f16.12), 2(1x,f8.3), 58(2x,f8.3))
+c 110     format(i5,2(2x, f16.12), 2(1x,f8.3), 58(2x,f8.3))
 c
          nstars = nstars + 1
          ra_stars(nstars)  = rra
