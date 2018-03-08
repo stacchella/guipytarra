@@ -22,7 +22,7 @@ c
       real gain_image
 c
       integer expected, zbqlpoi
-      integer colcornr, rowcornr, naxis1, naxis2, filter_index
+      integer colcornr, rowcornr, naxis1, naxis2, filter_index, junk
       integer verbose, sca_id, nnn, max_stars, nfilters, ix, iy,
      *     i, j, nstars, ixmin, ixmax, iymin, iymax, seed, invert
 c
@@ -57,13 +57,19 @@ c
       xhit     = 0.0d0
       yhit     = 0.0d0
 c
+      if(sca_id.lt.481) then
+         junk = 1
+      else
+         junk = sca_id
+      end if
+c
       print *, 'going to add ', nstars, ' stars to image!'
 c
       do i = 1, nstars
 c
 c     find SCA coordinates for this object 
 c
-         call ra_dec_to_sca(sca_id, 
+         call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
      *        ra_stars(i), dec_stars(i), pa_degrees, 
      *        xc, yc,  osim_scale, xs, ys)
