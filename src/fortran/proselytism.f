@@ -159,14 +159,14 @@ c            print 120, tra, tdec,  x_sca, y_sca
      &              'color=magenta',1x,  'text={',f6.3,'}')
                write(4, 1080) x_sca, y_sca !, l
  1080          format('image;point(',f12.7,',',f12.7,'#point= cross ',
-     &              'color=red') ! text={',i5,'}')
+     &              'color=red')
             else
                write(3, 1075) tra, tdec !, l
  1075          format('fk5;point(',f12.7,',',f12.7,'#point=box ',
-     &              'color=grey') ! text={',i5,'}')
+     &              'color=grey')
                write(4, 1085) x_sca, y_sca !, l
  1085          format('image;point(',f12.7,',',f12.7,'#point= circle ',
-     &              'color=red') ! text={',i5,'}')
+     &              'color=red')
             end if
          end if
  1090    continue

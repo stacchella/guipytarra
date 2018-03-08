@@ -55,8 +55,11 @@ c
       end if
 c
       xhit     = 0.0d0
-      xhit     = 0.0d0
-      do  i = 1, nstars
+      yhit     = 0.0d0
+c
+      print *, 'going to add ', nstars, ' stars to image!'
+c
+      do i = 1, nstars
 c
 c     find SCA coordinates for this object 
 c

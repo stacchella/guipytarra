@@ -2,7 +2,6 @@ c
 c=======================================================================
 c
       subroutine rotate_coords2(xr, yr, xx, yy, x0, y0, angle) 
-c     *     xoff, yoff)
       implicit none
       double precision xr, yr, xx, yy, x0, y0, angle, xoff, yoff,
      *     xi, yi

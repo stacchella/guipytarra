@@ -57,7 +57,7 @@ c
          junk = sca_id
       end if
 c
-      print *, 'adding now ', ngal, ' to the image!'
+      print *, 'going to add ', ngal, ' galaxies to image!'
 c
       do ng = 1, ngal
 c
