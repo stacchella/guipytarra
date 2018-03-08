@@ -69,8 +69,8 @@ c
 c
 c     find SCA coordinates for this object 
 c
-        print *, 'star RA, DEC: ', ra_stars(i), dec_stars(i)
-        print *, 'star mag: ', mag_stars(i, icat_f)
+c        print *, 'star RA, DEC: ', ra_stars(i), dec_stars(i)
+c        print *, 'star mag: ', mag_stars(i, icat_f)
 c
         call ra_dec_to_sca(junk, 
      *        ra_dithered, dec_dithered, 
