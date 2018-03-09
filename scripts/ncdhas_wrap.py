@@ -9,6 +9,8 @@ also runs it.
 
 import os
 from astropy.io import fits
+import argparse
+import glob
 
 print os.environ['NCDHAS_PATH']
 
@@ -17,20 +19,36 @@ print os.environ['NCDHAS_PATH']
 # define file list name to reduce
 # -------------------------------
 
-file_name_list = ['/Users/sandrotacchella/Desktop/sim_cube_F277W_490_001.fits']
+#file_name_list = ['/Users/sandrotacchella/Desktop/sim_cube_F277W_490_001.fits']
+
+# get input from command line
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--file_list', nargs='+', help="list of files to process")
+parser.add_argument("--environ", type=str, help="specify location: laptop / cluster")
+args = parser.parse_args()
+
+file_name_list = args.file_list
+environ = args.environ
+
+if '*' in file_name_list:
+    cwd = os.getcwd()
+    file_name_list = glob.glob(cwd + file_name_list)
 
 
 # ------------
 # define paths
 # ------------
 
-# Sandro Laptop
-path_calibration_files = '../../../../../../Volumes/Tacchella/Work/Postdoc/JWST_GTO/cal/'
-ncdhas = '/Users/sandrotacchella/ASTRO/JWST/img_simulator/ncdhas-v2.0rev107/ncdhas '
+if (environ == 'laptop'):
+    # Sandro Laptop
+    path_calibration_files = '../../../../../../Volumes/Tacchella/Work/Postdoc/JWST_GTO/cal/'
+    ncdhas = '/Users/sandrotacchella/ASTRO/JWST/img_simulator/ncdhas-v2.0rev107/ncdhas '
+else:
+    # Cluster
+    path_calibration_files = '../guipytarra/data/cal/'
+    ncdhas = '/n/eisenstein_lab/Users/stacchella/img_simulator/ncdhas-v2.0rev107/ncdhas '
 
-# Cluster
-#path_calibration_files = 'TBD'
-#ncdhas='TBD '
 
 # ----------------------------------
 # define reduction specific features
