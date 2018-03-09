@@ -919,7 +919,7 @@ c
 c     these are really simplified - each field and orientation
 c     has its own values for the image scale
 c
-      if(sca_id .eq. 485 .or. sca_id .eq.490) then
+      if(sca_id .eq. 485 .or. sca_id .eq. 490) then
          scale = 0.0648d0
       else
          scale = 0.0317d0
