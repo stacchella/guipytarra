@@ -31,9 +31,11 @@ args = parser.parse_args()
 file_name_list = args.file_list
 environ = args.environ
 
-if '*' in file_name_list:
+if '*' in file_name_list and '/' not in file_name_list:
     cwd = os.getcwd()
     file_name_list = glob.glob(cwd + file_name_list)
+elif '*' in file_name_list:
+    file_name_list = glob.glob(file_name_list)
 
 
 # ------------
