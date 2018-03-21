@@ -28,9 +28,9 @@ c
      &     brain_dead_test, include_1_over_f
 
       integer nnn, i, j, k,  nlx, nly, level
-      character latent_file*120
+      character latent_file*(*)
       character object*20, partname*5, module*20, filter_id*5
-      character noise_name*120
+      character noise_name*(*)
 c     
       parameter (nnn=2048, max_order=7)
 c
@@ -41,7 +41,8 @@ c
      *     well_depth(nnn,nnn), linearity(nnn,nnn,max_order),
      *     bias(nnn,nnn), gain_image(nnn,nnn), scratch(nnn,nnn)
 c
-      dimension gain(10)
+      dimension gain(10), dark_mean(10), dark_sigma(10), 
+     &     read_noise(10)
 c
 c     images
 c
@@ -63,8 +64,8 @@ c
 c
 c     How to tag this to a previous image ?
 c
-      write(latent_file, 1120) filter_id, iabs(sca_id)
- 1120 format('latent_',a5,'_',i3.3,'.fits')
+c      write(latent_file, 1120) filter_id, iabs(sca_id)
+c 1120 format('latent_',a5,'_',i3.3,'.fits')
 c
 c     read gain, bias and well-depth images; set the average and sigma values
 c     for the darks.
@@ -86,7 +87,7 @@ c
 c     
 c     create baseline image (bias + ktc)
 c     
-      if(include_ktc.eq.0) then
+      if(include_ktc.eq.0.and.noiseless .eqv. .false.) then
          bias_value = 10.0d0
       end if
       if(include_ktc.eq.1) then

@@ -2,7 +2,8 @@ c
 c-----------------------------------------------------------------------
 c
       subroutine add_galaxy_component(xg, yg, magnitude, id,
-     *     ellipticity,re, rmax, theta, nsersic, zp, scale, 
+     *     ellipticity,re, rmax, 
+     *     theta, nsersic, zp, scale, 
      *     pa_degrees,
      *     wavelength, bandwidth, system_transmission, 
      *     mirror_area, integration_time,seed, 
@@ -132,7 +133,8 @@ c
 c     
 c     convolve with PSF
 c     
-         if(debug.gt.1) then
+c         if(debug.gt.1) then
+         if(noiseless.eqv. .True.) then
             ix    = idnint(xgal)
             iy    = idnint(ygal)
             if(ix.gt.4 .and. ix. lt.2045 .and. 
@@ -154,6 +156,7 @@ c
                intensity = 1.d0
                call add_ipc(ix, iy, intensity, ipc_add)
 c
+               flux_total = flux_total + 1.d0
                do i = 1, overlap
                   if(cube(ix, iy,i).eq.0) then
                      last = i -1
@@ -171,10 +174,10 @@ c               print *,'add_galaxy_component ', ix, iy, indx, id
          end if
       end do
 c
-      if(debug.gt.1) then
-         print 800, nsersic, re,  ellipticity,
-     *        magnitude, photons*integration_time, expected
- 800     format(2x,f7.3,3(2x,f9.4),2x, f11.1, 2x, i10,
+      if(debug.gt.0) then
+         print 800, id, nsersic, re,  ellipticity,
+     *        magnitude, photons*integration_time, expected,flux_total
+ 800     format(i8,2x,f7.3,3(2x,f9.4),2x, f11.1, 2x, i10,2x,f12.1,
      &        ' add_galaxy_component')
       end if
       return
