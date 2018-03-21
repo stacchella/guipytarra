@@ -21,7 +21,7 @@ c
      *     groupgap, group, sca_id, nx, ny, nframe, ngroups,
      *     nnn, job, iunit, nints
       logical simple,extend
-      logical subarray
+      character*(*) subarray
       integer colcornr, rowcornr, naxis1, naxis2
       character filename*(*), cunit1*8, cunit2*8, string*8
 c

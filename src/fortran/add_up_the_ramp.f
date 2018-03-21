@@ -89,8 +89,8 @@ c
 
       integer i, j, k, loop, nlx, nly, level
       integer nnn, nstars, ngal, in_field
-      character filename*120, latent_file*120, psf_file*120,
-     &     noise_name*120
+      character filename*(*), latent_file*120, psf_file*(*),
+     &     noise_name*(*)
       character object*20, partname*5, module*1, filter_id*5
 c     
       character subarray*(*)
@@ -132,7 +132,7 @@ c
       common /parameters/ gain,
      *     decay_rate, time_since_previous, read_noise, 
      *     dark_mean, dark_sigma, ktc, voltage_offset 
-c                    
+c     
       q   = dacos(-1.0d0)/180.d0
       tol = 1.d-10
       eps = 1.d-16
@@ -176,22 +176,25 @@ c      call sca_to_ra_dec(sca_id,
 c     *     ra_dithered, dec_dithered,
 c     *     ra_sca, dec_sca, pa_degrees, 
 c     *     xc, yc, osim_scale, x_sca, y_sca)
-      print *,'crval1, crval2', crval1, crval2
-      print *,'crpix1, crpix2', crpix1, crpix2
-      print *,'ra_dithered, dec_dithered',ra_dithered, dec_dithered
-      print *,'ra_sca, dec_sca',ra_sca, dec_sca
-      print *,'pa_degrees, osim_scale',pa_degrees, osim_scale
-      print *,'xc, yc', xc, yc
-      print *,'add_up_the_ramp crval1, crval2, crval3',
-     *     crval1, crval2, crval3
+c      print 1130, psf_file
+c      print *,'crval1, crval2', crval1, crval2
+c      print *,'crpix1, crpix2', crpix1, crpix2
+c      print *,'ra_dithered, dec_dithered',ra_dithered, dec_dithered
+c      print *,'ra_sca, dec_sca',ra_sca, dec_sca
+c      print *,'pa_degrees, osim_scale',pa_degrees, osim_scale
+c      print *,'xc, yc', xc, yc
+c      print *,'add_up_the_ramp crval1, crval2, crval3',
+c     *     crval1, crval2, crval3
 c
 c     Read PSF
 c
+c      print 1130, psf_file
       if(verbose.gt.1) then
          PRINT *,'SCA_IMAGE:', sca_id, ra_dithered, dec_dithered, 
      *        x_sca, y_sca, ra_sca, dec_sca
          print 1130, psf_file
       end if
+      print 1130, psf_file
  1130 format('read psf ', a120)
       call read_psf(psf_file, verbose)
       if(verbose.gt.2) print *,'psf has been read'
@@ -281,9 +284,9 @@ c
 c     add sky background [e-]
 c     
                if(include_bg .eq. 1) then 
-                  if(verbose.ge.1) print *, 
-     &              'going to add sky background',background,
-     &                 ' e-/sec/pixel'
+                  if(verbose.ge.2) print *, 
+     &              'add sky background',background,
+     &                 ' e-/sec/pixel', loop, nframe+nskip
                   call add_sky_background(background,
      *                 subarray, colcornr, rowcornr, naxis1, naxis2,
      *                 integration_time, noiseless,verbose)
@@ -318,7 +321,7 @@ c
 c     Add charge to reference pixels (and whole image) [e-]
 c     
             if(include_reference.eq.1) then
-               if(verbose.gt.1) print *,'add reference pixels'
+               if(verbose.gt.2) print *,'add reference pixels'
                call add_reference_pixels(read_noise, even_odd,
      &              subarray,colcornr, rowcornr, naxis1, naxis2)
             end if

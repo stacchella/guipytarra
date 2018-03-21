@@ -48,8 +48,8 @@ c
          jstart = 1
          jend   = naxis2
       end if
-      print *, subarray
-      print *,'add_background:',istart, iend, jstart,jend
+c      print *, subarray
+c      print *,'add_background:',istart, iend, jstart,jend
       do j = jstart, jend
          if(subarray .eq. 'FULL') then
             l = j

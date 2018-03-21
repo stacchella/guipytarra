@@ -131,7 +131,7 @@ c
      *        tz, semi_major, semi_minor, ttheta, tnsersic,
      *        (array(j), j = 1, nfilters)
 
-c         if(array(nfilters-1).gt.25.d0) go to 1090
+         if(array(nfilters-1).gt.25.d0) go to 1090
          go to 1050
  1030      continue
          print *,'skipping '
