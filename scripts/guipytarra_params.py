@@ -36,10 +36,6 @@ run_params_in = {'verbose': 1,             # verbose (f.e. 1)
                  # image RA and DEC information
                  'ra0': 53.17778300,          # RA of pointing
                  'dec0': -27.79990000,        # DEC of pointing
-                 'new_ra': 53.17778300,       # RA of pointing
-                 'new_dec': -27.79990000,     # DEC of pointing
-                 'dx': 53.17778300,           # RA of pointing
-                 'dy': -27.79990000,          # DEC of pointing
                  # detector, filter and catalog input
                  'sca_id': 490,               # ID of SCA to use  (f.e. 487)
                  'filter_index': 14,          # index of filter in 'nircam_calib.list' and 'psf.list'  (f.e. 10 for F200W)
