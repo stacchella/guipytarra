@@ -28,9 +28,9 @@ c
      &     brain_dead_test, include_1_over_f
 
       integer nnn, i, j, k,  nlx, nly, level
-      character latent_file*(*)
+      character latent_file*(180)
       character object*20, partname*5, module*20, filter_id*5
-      character noise_name*(*)
+      character noise_name*(180)
 c     
       parameter (nnn=2048, max_order=7)
 c

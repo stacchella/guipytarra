@@ -89,8 +89,8 @@ c
 
       integer i, j, k, loop, nlx, nly, level
       integer nnn
-      character filename*(*), latent_file*(*), psf_file*(*),
-     &     noise_name*(*)
+      character filename*(180), latent_file*(180), psf_file*(180),
+     &     noise_name*(180)
       character object*20, partname*5, module*1, filter_id*5
 c     
       character subarray*(*)

@@ -200,15 +200,15 @@ c
 c
       integer verbose, skip, dhas, i, j, k, seed, n_image_x, n_image_y
       integer (kind=4) int_image, fpixels, lpixels, group, nullval
-      character noise_name*(*),latent_file*(*)
-      character cube_name*(*), test_name*(*)
+      character noise_name*(180),latent_file*(180)
+      character cube_name*(180), test_name*(180)
 c
 c     PSF-related
 c
       double precision integrated_psf
       integer nxny, nxy, over_sampling_rate
       logical psf_add
-      character psf_file*(*)
+      character psf_file*(180)
 c     
 c
 c     input parameters
@@ -309,13 +309,6 @@ c
       common /galaxy/ra_galaxies, dec_galaxies, z, magnitude,
      *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents,
      *     id, ngal
-c
-      common /wcs/ equinox, 
-     *     crpix1, crpix2,      ! crpix3,
-     *     crval1, crval2,      !crval3,
-     *     cdelt1, cdelt2,      !cdelt3,
-     *     cd1_1, cd1_2, cd2_1, cd2_2,! cd3_3,
-     *     pc1_1, pc1_2, pc2_1, pc2_2 !, pc3_1, pc3_2
 c
        data osim_scale/60.d0/
 c       data osim_scale/1.59879d0/
