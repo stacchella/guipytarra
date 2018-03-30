@@ -116,8 +116,8 @@ c     *           total_per_cycle, expected
                if(psf_add .eqv. .true.) 
      &              call psf_convolve(seed, xhit, yhit)
 c     
-               ix = idnint(xs - 2.0*xhit)
-               iy = idnint(ys - 2.0*yhit)
+               ix = idnint(xs - xhit)
+               iy = idnint(ys - yhit)
 c
 c     add this photo-electron
 c     
