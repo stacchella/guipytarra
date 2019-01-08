@@ -14,6 +14,7 @@ c
 c
       dimension radius(nnn), profile(nnn), int_profile(nnn)
 c
+c      print *,'int_sersic'
       pi = dacos(-1.0d0)
       eps = 1.d-3
 c
@@ -28,31 +29,37 @@ c     (ie, bn)
 c
 c
       axial_ratio = 1.d0-ellipticity
-      bn        = sersic_bn(n)
-      intensity = ie_sersic(magnitude, re, n, bn, axial_ratio)
-c      ie        = find_ie(magnitude, re, n, bn, axial_ratio)
-      ie = intensity
+      bn          = sersic_bn(n)
+c     intensity at the effective radius
+      ie          = ie_sersic(magnitude, re, n, bn, axial_ratio)
+c     effective area
       area_e = pi *re * re
 c     surface brightness at effective radius
       mue = -2.5d0*dlog10(ie/area_e)
 c     central surface brightness
       mu0 = mue-2.5d0*bn/dlog(10.0d0)
+c     total magnitude
       itot = total_mag(n, bn, ie, re)
-      if(debug.gt.1) 
-     *     print 10,  magnitude, re, n, bn
- 10   format('int_sersic: mtot,      re,      n,        bn ',/,
-     *     8x, f9.4,2x,f8.4,2x,f6.2,2x,f9.5)
-c      print *, 'Ie numerical, from gamma ', ie, intensity, zp*intensity
-c     print *, ' int_sersic: mue, mu0, dmu', mue, mu0, mue-mu0
-c      print *, ' Ae, log10(Ae)', area_e, 2.5*log10(area_e)
+      if(debug.gt.1) then
+         print 10,  magnitude, re, n, bn
+ 10      format('int_sersic: mtot,      re,      n,        bn ',/,
+     *        8x, f9.4,2x,f8.4,2x,f6.2,2x,f9.5)
+         print *, 'Ie Jy/pixel**2           ', ie
+         print *, 'int_sersic: mue, mu0, dmu', mue, mu0, mue-mu0
+         print *, 'Ae, log10(Ae)', area_e, 2.5*log10(area_e)
+      end if
 c
       nr = nnn
       dr = dlog10(rmax/eps)/dble(nr-1)
-      if(debug.gt.1) print *,'int_sersic: rmax, dr ', rmax, dr
+      if(debug.gt.1) print *,'int_sersic: rmax, dr in re units ',
+     &     rmax, dr
       sum = 0.d0
       if(debug.eq.1) open(1,file='int_sersic.dat')      
       do i = 1, nr
          radius(i)  = eps*10.d0**(dble(i-1)*dr)
+c
+c     integrated flux to r
+c
          if(radius(i) .eq.0.0d0) then
             flux       = flux_to_r(n, bn, ie, re, eps)
          else
@@ -68,8 +75,9 @@ c
 c     surface brightness in mag/arcsec**2
          profile(i) = sb_sersic(n, bn, mue, re, radius(i))
 c     surface brightness in flux/arcsec**2
-c     these are equivalent: profile = -2.5*dlog10(intensity/area_e)
          intensity  = sersic_profile(n, bn, ie, re, radius(i))
+c     note that the above are related through:
+c     profile = -2.5*dlog10(intensity/area_e)
 c
 c     "curve of growth"; requires subtracting - 2.5d0*dlog10(area_e)
 c     to be equivalent to flux_to_r if mue is used;
@@ -84,11 +92,12 @@ c
             write(1,100) radius(i)/re, flux, amag,
      *         -2.5d0*dlog10(sum),-2.5d0*dlog10(flux), 
      *           amag - 2.5d0*dlog10(area_e),
-     *           profile(i), -2.5d0*dlog10(intensity/area_e)
- 100        format(f8.2, 10(1x,f12.4))
+     *           profile(i), -2.5d0*dlog10(intensity/area_e),
+     *           intensity, radius(i)*intensity/re
+ 100        format(f10.6, 1x,e15.6, 6(1x,f12.4),2(1x,e15.6))
          end if
       end do
-      if(debug.eq.1) close(1)
+      if(debug.gt.1) close(1)
       return
  200  nr = i -1
       if(debug.eq.1) close(1)
@@ -200,8 +209,8 @@ c
       double precision function mag_to_r(n, bn, mue, re, r)
 c
 c     Graham & Driver 2005, PASA, 22, 118,  eq. (5)
-c     Calculate the total flux within radius r. 
-c     gammain(x, p) = [1/gamma(p)] * int_0^x exp(-t) * t**(p-1)*dt
+c     Calculate the total magnitude within radius r. 
+c     gammain(x, p) = [1/gamma(p)] int_0^x exp(-t) * t**(p-1)*dt
 c     therefore to calculate small_gamma of eq (3): 
 c     small_gamma(x, 2n) = gamma(2n) * gammain(x,2n)
 c
@@ -210,8 +219,9 @@ c     -2.5*dlog10(flux[<=R]) = mag(<=R) - 2.5d0*dlog10(area_e)
 c
       implicit none
       double precision n, bn, mue, re, r, x
-      double precision gammain, alngam, two_n, eps
+      double precision gammain, alngam, two_n, eps, pi
       integer chabu1, chabu2
+      pi = dacos(-1.0d0)
 c
       eps = 1.d-16
 c
@@ -224,10 +234,15 @@ c
       two_n    = 2.d0 * n
 c
       mag_to_r = dexp(alngam(two_n,chabu1)) * gammain(x,two_n,chabu2)
+c      mag_to_r = gammain(x,two_n,chabu2)
       mag_to_r = mag_to_r * 2.d0 * dacos(-1.0d0) * n 
       mag_to_r = mag_to_r * dexp(bn)/(bn**two_n)
       mag_to_r = 2.5d0*dlog10(mag_to_r)
       mag_to_r = mue - 5.d0*dlog10(re) - mag_to_r
+c     so this is equivalent to -2.5 * dlog10(L<r) need to add
+c     -2.5d0 dlog10(pi) 
+c     IF the mean effective surface brightness is used
+      mag_to_r = mag_to_r - 2.5d0*dlog10(pi)
       return
       end
 c
@@ -258,9 +273,9 @@ c
       double precision function ie_sersic(magnitude, re, n, bn, 
      *     axial_ratio)
 c
-c     Find value of the effective radius given a Sersic profile (N) 
-c     and total magnitude. Both Ie and Ie are defined at half-light 
-c     radius so that
+c     Find value of the intensity at the effective radius given 
+c     a Sersic profile (N) and total magnitude. Both Ie and Ie are 
+c     defined at half-light   radius so that
 c     (Ltot/2)  = Ie * Re**2 * 2*pi*n*exp(bn) * gammainc(x,2*n)/(bn**(2*n))
 c     (Graham & Driver 2005, PASA, 22, 118, eq. 2)
 c     where  x= bn * (r/Re)**(1/n). As r== Re, then x  = bn  and

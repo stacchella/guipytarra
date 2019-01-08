@@ -1,5 +1,5 @@
 c
-c     Add baseline counts (Bias + ktc noise) to a frame before
+c     Add baseline counts (Bias + kTC noise) to a frame before
 c     writing out. This keeps the calculation of the linearity 
 c     correction cleaner. Input and output units must be in ADU
 c     not electrons.
@@ -45,18 +45,19 @@ c      even_odd(5) = 0.983038d0
 c      even_odd(6) = 0.983038d0
 c      even_odd(7) = 1.01164d0
 c      even_odd(8) = 1.01164d0
-
-      if(subarray .ne. 'FULL') then
+c
+c     2018-06-05
+c      if(subarray .ne. 'FULL') then
          istart = 1
          iend   = naxis1
          jstart = 1
          jend   = naxis2
-      else
-         istart = 5
-         iend   = n_image_x - 4
-         jstart = 5
-         jend   = n_image_y - 4
-      end if
+c      else
+c         istart = 5
+c         iend   = n_image_x - 4
+c         jstart = 5
+c         jend   = n_image_y - 4
+c      end if
 
       do j = jstart, jend
          do i = istart, iend 

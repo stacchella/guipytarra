@@ -25,7 +25,7 @@ c
       integer max_objects, nfilters, nsub, nf_used, cat_filter,indx
       integer ngal, ncomponents,i, j, nc, l, filters_in_cat, id
 c
-      character filename*80,line*100
+      character filename*80,line*100, header*200
 c     
       parameter (max_objects=50000, nfilters=54, nsub=4)
 c     
@@ -46,7 +46,8 @@ c
       print *, filters_in_cat
       print *, filename
       open(1,file=filename)
-      read(1,*)
+      read(1,190) header
+ 190  format(a200)
       ngal = 0
       open(2,file='cat.reg')
       do i = 1, max_objects

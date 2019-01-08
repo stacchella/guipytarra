@@ -57,7 +57,7 @@ c
       null   = -1
       status = 0
       call ftgiou(unit, status)
-      print *,'add_one_over_f_noise: ',filename
+c      print *,'add_one_over_f_noise: ',filename
       call ftopen(unit, filename, 1, block, status)
 
       call ftgkyj(unit,"BITPIX",bitpix,comment, status)
@@ -105,9 +105,13 @@ c
          j2 = naxes(2)
       end if
 c     
+c     there is a bug in the output from nghxrg when output in e-
+c     such that 32678 is added when it should not be
+c
       do j = j1, j2
          do i = i1, i2
-            accum(i,j) = accum(i,j) + cube(i,j,1)
+            accum(i,j) = accum(i,j) + cube(i,j,1)- 32678.d0
+c            if(i.eq.1 .and. j.eq.1 ) print *, i, j, level, cube(i,j,1)
          end do
       end do
 c

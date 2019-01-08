@@ -6,7 +6,7 @@ c
      *     xc, yc, osim_scale, filter_index, 
      *     ngal, scale, 
      *     wavelength, bandwidth, system_transmission, 
-     *     mirror_area, integration_time, seed, in_field, 
+     *     mirror_area, abmag, integration_time, seed, in_field, 
      *     noiseless, psf_add, ipc_add,debug)
 
       implicit none
@@ -16,7 +16,7 @@ c
      *     magnitude, ellipticity, theta, re, nsersic,flux_ratio,
      *     z, scale, 
      *     wavelength, bandwidth, system_transmission, 
-     *     mirror_area, integration_time
+     *     mirror_area, abmag,integration_time
       double precision rmax, photons, mag, zp, mzp
       double precision xgal, xhit, ygal, yhit,
      *     x_sca, y_sca, xx, yy, x_osim, y_osim
@@ -117,13 +117,18 @@ c
  110           format('add_modelled_galaxy filter_index, ng, nc, mag',
      &              3(2x,i6), 2(2x,f20.12))
             end if
-            call add_galaxy_component(xg, yg, mag, id(ng),
-     *           ellipticity(ng, nc), re(ng,nc), rmax, 
-     *           theta(ng, nc), nsersic(ng, nc), zp, scale,
-     *           pa_degrees,
-     *           wavelength, bandwidth,system_transmission, 
-     *           mirror_area, integration_time,seed,
-     *           noiseless, psf_add, ipc_add, debug)
+            if(nsersic(ng,nc) .ge.20.d0 .and. re(ng,nc) .le. 0.1d0) then
+               call add_star(xg, yg, mag, abmag, integration_time,
+     *              noiseless, psf_add, ipc_add, debug)
+            else
+               call add_galaxy_component(xg, yg, mag, id(ng),
+     *              ellipticity(ng, nc), re(ng,nc), rmax, 
+     *              theta(ng, nc), nsersic(ng, nc), zp, scale,
+     *              pa_degrees,
+     *              wavelength, bandwidth,system_transmission, 
+     *              mirror_area, abmag, integration_time,seed,
+     *              noiseless, psf_add, ipc_add, debug)
+            end if
          end do
          in_field = in_field +1
  200     continue

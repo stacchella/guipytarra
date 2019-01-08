@@ -51,8 +51,8 @@ c
 c Find offsets relative to optical axis, taking into account the
 c sampling rate.
 c
-      xhit  = (x - nx/2.d0)
-      yhit  = (y - ny/2.d0)
+      xhit  = x - (nx/2)
+      yhit  = y - (ny/2)
 c      print *, index, zest, x, mod(index,nx), iy,y,xhit,yhit
 c      print *,' ** ', xhit, yhit, zest, iy, index,nxy, fz
 c      print *, nx, ny, x, y, over_sampling_rate, integrated_psf(nxy)

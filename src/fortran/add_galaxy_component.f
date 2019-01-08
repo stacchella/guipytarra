@@ -6,7 +6,7 @@ c
      *     theta, nsersic, zp, scale, 
      *     pa_degrees,
      *     wavelength, bandwidth, system_transmission, 
-     *     mirror_area, integration_time,seed, 
+     *     mirror_area, abmag, integration_time,seed, 
      *     noiseless, psf_add, ipc_add, debug)
 c
 c     Code to add photons for a single Sersic component
@@ -14,7 +14,7 @@ c
       implicit none
       double precision xg, yg, magnitude, ellipticity, re, rmax, theta,
      *     nsersic, zp, scale, mirror_area, wavelength,
-     *     bandwidth, system_transmission, integration_time
+     *     bandwidth, system_transmission, abmag, integration_time
       double precision a11, a12, a21, a22
       integer seed, debug, id, cube, overlap, last, indx
 c
@@ -27,7 +27,8 @@ c
      *     intensity, pa_degrees
       integer nr, nnn,i, j, expected, ix, iy,n_image_x, n_image_y
 c
-      double precision ab_mag_to_photon_flux,zbqlu01
+      double precision ab_mag_to_photon_flux,zbqlu01,
+     *     photon_flux_from_uresp
       integer zbqlpoi
       logical noiseless, psf_add, ipc_add
 c
@@ -50,6 +51,7 @@ c
       call int_sersic(nr, radius, profile, int_profile, nnn,
      *     magnitude, re, rmax, nsersic, zp, ellipticity, debug)
       if(debug.gt.2) then
+c      print *,'add_galaxy_component: nr ',nr
          do j = 1, nr,100
             print 40,j, radius(j), profile(j), int_profile(j),
      *           -2.5d0*dlog10(int_profile(j))
@@ -60,10 +62,12 @@ c
 c     
 c     calculate total number of expected photons within profile
 c
-      photons =  
-     *     ab_mag_to_photon_flux(magnitude, mirror_area,
-     *     wavelength, bandwidth, system_transmission)
-      
+c      photons =  
+c     *     ab_mag_to_photon_flux(magnitude, mirror_area,
+c     *     wavelength, bandwidth, system_transmission)
+c      print *,'photons 1',photons
+      photons = photon_flux_from_uresp(magnitude, abmag)
+c     print *,'photons 2',photons, magnitude, abmag
       if(noiseless .eqv. .true.) then
          expected  = photons * integration_time
       else
@@ -146,6 +150,7 @@ c         if(debug.gt.1) then
             xhit = 0.d0
             yhit = 0.d0
             if(psf_add .eqv. .true.) call psf_convolve(seed, xhit, yhit)
+c            print *,' xhit, yhit',xhit, yhit
             ix = idnint(xgal - xhit)
             iy = idnint(ygal - yhit)
 c     

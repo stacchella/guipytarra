@@ -1,9 +1,10 @@
-c     Add to entire array the constribution due to reference pixels
+c     Add charge to reference pixels
 c     According to B. Rauscher the noise is 0.80 times lower than 
-c     for normal pixels. For now not adding the even/odd offsets,
-c     which most likely depend on the amplifiers
+c     for normal pixels. The noise is moduled by the relative
+c     bias between amplifiers, assumed identical for
+c     all SCAs.
 c
-c     cnaw 2016-06-30
+c     cnaw 2018-06-05
 c     Steward Observatory, University of Arizona
 c     
       subroutine add_reference_pixels (read_noise,even_odd,

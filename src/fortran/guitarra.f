@@ -132,7 +132,8 @@ c
       double precision ra_galaxies, dec_galaxies, 
      *     z, magnitude, nsersic, ellipticity,
      *     re, theta, flux_ratio
-      integer max_stars, max_objects, nsub, ncomponents, nstars, ngal
+      integer max_stars, max_objects, nsub, ncomponents, nstars, ngal,
+     *     catalogue_filters_used
       character clone_path*120, star_catalogue*120, galaxy_catalogue*120
 c
 c     these need to be checked because may not be needed,
@@ -189,7 +190,7 @@ c
       double precision photplam, photflam, f_nu, stmag, abmag
       integer nfilter_wl, nbands, npar, nfilters, use_filter,
      &     filter_in_cat, nf_used, nf, filter_index, cat_filter
-      character filterid*20, temp*20
+      character filterid*20, temp*20, filter_path*120
 c
 c     image-related
 c
@@ -205,7 +206,7 @@ c
 c     PSF-related
 c
       double precision integrated_psf
-      integer nxny, nxy, over_sampling_rate
+      integer nxny, nxy, over_sampling_rate, n_psf_x, n_psf_y
       logical psf_add
       character psf_file*120
 c     
@@ -234,7 +235,7 @@ c
 c     SCA parameters
 c
       dimension dark_mean_cv3(10), dark_sigma_cv3(10), gain_cv3(10),
-     *     read_noise_cv3(10)
+     *     read_noise_cv3(10), voltage_offset(10), ktc(10)
       dimension dark_mean(10), dark_sigma(10), gain(10),
      *     read_noise(10)
 c     
@@ -310,6 +311,9 @@ c
       common /galaxy/ra_galaxies, dec_galaxies, z, magnitude, 
      *     nsersic, ellipticity, re, theta, flux_ratio, ncomponents
 
+      common /psf/ integrated_psf,n_psf_x, n_psf_y, 
+     *     nxy, over_sampling_rate
+
        data osim_scale/60.d0/
 c       data osim_scale/1.59879d0/
        common /transform/ xshift, yshift, xmag, ymag, xrot, yrot
@@ -325,16 +329,42 @@ c
 c     e-
       data read_noise_cv3/11.3d0, 10.5d0, 10.2d0, 10.3d0, 8.9d0,
      *     11.5d0, 12.7d0, 11.3d0, 12.0d0, 10.5d0/
+c     Gains  in e-/ADU
+c     These come from Jarron L and are derived from ISIMCV3 measurements
+c     2018-06-07
 c
-c     e-/ADU
-c     gain_cv3 was measured using IDL's biweight_mean on the ISIMCV3
-c     images, removing NaN, infinities and reference pixels
-c     2016-07-05
-c      data gain_cv3/2.077d0, 2.020d0, 2.166d0, 2.01d90, 1.845d0,
-c     *     2.005d0, 2.440d0, 1.9381d0, 2.248d0, 1.7977d0/
+      data gain/2.07d0, 2.010d0, 2.16d0, 2.01d0, 1.83d0,
+     *     2.00d0, 2.42d0, 1.93d0, 2.30d0, 1.85d0/
       do i = 1, 10
          gain_cv3(i) = 1.d0
+c         gain_cv3(i) = gain(i)
       end do
+c
+c     voltage offsets in ADU from Jarron Leisenring
+c
+      voltage_offset(1)  =  5900.d0
+      voltage_offset(2)  =  5400.d0
+      voltage_offset(3)  =  6400.d0
+      voltage_offset(4)  =  6150.d0
+      voltage_offset(5)  = 11650.d0
+      voltage_offset(6)  =  7300.d0
+      voltage_offset(7)  =  7500.d0
+      voltage_offset(8)  =  6700.d0
+      voltage_offset(9)  =  7500.d0
+      voltage_offset(10) = 11500.d0
+c
+c     kTC in ADU (also from Jarron L)
+c
+      ktc(1) =  18.5d0 
+      ktc(2) =  15.9d0 
+      ktc(3) =  15.2d0 
+      ktc(4) =  16.9d0 
+      ktc(5) =  20.0d0
+      ktc(6) =  19.2d0
+      ktc(7) =  16.1d0
+      ktc(8) =  19.1d0
+      ktc(9) =  19.0d0
+      ktc(10) = 20.0d0
 c
 c     constants
 c
@@ -360,7 +390,7 @@ c      noiseless = .true.
       psf_add   = .true.
       ipc_add   = .true.
 c
-c     these are input by the user
+c     these are input by the user via the perl script
 c
       include_ktc        = 1
       include_bg         = 1
@@ -379,6 +409,8 @@ c
       else
          bitpix =  8
       end if
+c
+      eng_qual  = 'Imaginary'
 c
       obs_id      = 'MockFields'
       obslabel    = 'Mock'
@@ -406,20 +438,13 @@ c=======================================================================
 c
 c     Instrument related parameters
 c
-c     Voltage offset (in e-) to add as a baseline to all pixels
-c
-      voltage_offset  = 500.d0
-      voltage_offset  = 0.d0
-c
-
-c     kTC noise in e- (measured by K. Misselt)
-c
-      ktc = 30.d0               ! e-
       do i = 1, 10
-         dark_mean(i)  = dark_mean_cv3(i)
-         dark_sigma(i) = dark_sigma_cv3(i)
-         gain(i)       = gain_cv3(i)
-         read_noise(i) = read_noise_cv3(i)
+         ktc(i)            = ktc(i)*gain(i) ! ADU --> e-
+         voltage_offset(i) = voltage_offset(i) * gain(i) ! ADU --> e-
+         dark_mean(i)      = dark_mean_cv3(i)
+         dark_sigma(i)     = dark_sigma_cv3(i)
+         gain(i)           = gain_cv3(i)
+         read_noise(i)     = read_noise_cv3(i)
       end do
 c     
 c     Latents:
@@ -448,8 +473,9 @@ c
 c
 c=======================================================================
 c
-c      read(5,*,err=89) idither
-c 89   print *,'idither = ', idither
+c     these are fed through an input file (or by hand) :
+c     guitarra < /home/cnaw/desfalque/params_F200W_489_001.input
+c
       read(5,9,err=90) cube_name
  90   print 9, cube_name
       read(5,9,err=91) noise_name
@@ -460,10 +486,6 @@ c
 c     SCA to use
 c
       read(5,*) sca_id
-c
-c     Index for filter
-c
-c      read(5,*) indx
 c
 c     catalogues
 c
@@ -479,21 +501,26 @@ c     filter to use from the list in the source catalogue.
 c     This will be an index
 c
       read(5,*) use_filter
+c     
+      read(5,9) filter_path
+      print 9, filter_path
 c
 c     name of file containing background SED for observation date
 c
       read(5,9) zodifile
       print 9, zodifile
-      read(5,10) verbose
+      read(5,*) verbose
  10   format(i12)
-      print *, 'verbose = ', verbose
-      read(*,10) brain_dead_test
+c      print *, 'verbose = ', verbose
+      print *, 'verbose = ',verbose
+      read(*,*) noiseless
+      read(*,*) brain_dead_test
       print *, 'brain_dead_test     ', brain_dead_test
 c
 c     aperture
-      read(5,11) apername
+      read(5,11,err= 16) apername
  11   format(a20)
-      print *, 'apername  = ', apername
+ 16   print *, 'apername  = ', apername
  15   format(a20) 
 c
       read(5,11) readpatt
@@ -553,14 +580,14 @@ c
       print *,'include_cloned_galaxies       ',include_cloned_galaxies
  40   format(a80)
  50   format(a30,2x,a80)
-      read(*, 10) filter_in_cat
-      print *,'number of filters in catalogue', filter_in_cat
-      read(5,10) icat_f
-      print *,'filter index in catalogue     ', icat_f
-      read(5,10) indx
-      print *,'filter index in filter list   ', indx
-      read(5,*) filter_id
-      print *,'filter_id                     ',filter_id
+c      read(*, 10) filter_in_cat
+c      print *,'number of filters in catalogue', filter_in_cat
+c      read(5,10) icat_f
+c      print *,'filter index in catalogue     ', icat_f
+c      read(5,10) indx
+c      print *,'filter index in filter list   ', indx
+c      read(5,*) filter_id
+c      print *,'filter_id                     ',filter_id
       read(5,40) primary
       read(5,*) primary_position
       read(5,*) primary_total
@@ -569,15 +596,18 @@ c
 c
 c     print some confirmation values
 c
-      print *, filter_in_cat 
+      idither = subpixel_position
+      print *,' filter_in_cat' , use_filter 
 c      print *, idither, ra0, dec0, new_ra, new_dec, dx,
 c     *     dy, sca_id, indx, icat_f
-      print *, idither, ra0, sca_id, indx, icat_f
+      print *, ' idither, ra0, sca_id, indx, icat_f ',
+     &     idither, ra0, sca_id, use_filter, icat_f
 c
       scale               =   0.0317d0
       if(sca_id .eq. 485 .or. sca_id .eq.490) then
          scale = 0.0648d0
       end if
+
 c^&&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
 c      readpatt = 'RAPID'
 c      ngroups  = 10
@@ -588,7 +618,7 @@ c=======================================================================
 c
 c     read filter parameters
 c
-      call read_filter_parameters(nf_used, verbose)
+      call read_single_filter(filter_path, use_filter, verbose)
 c     
 c     read list of fits filenames of point-spread-function
 c
@@ -596,7 +626,7 @@ c
 c
 c=======================================================================
 c
-      j                   = indx
+      j                   = use_filter
       temp                = filterid(j)
       filter_id           = temp(8:12)
 c      filter_id           = temp(1:5)
@@ -605,11 +635,14 @@ c      filter_id           = temp(1:5)
       system_transmission = filtpars(j,16) 
       photplam            = filtpars(j,10)
       uresp               = filtpars(j,25)
+      photplam            = filtpars(j,10) ! pivot wavelength
       photflam            = filtpars(j,27)
       abmag               = filtpars(j,28)
       stmag               = filtpars(j,29)
-      filter_index        = j
-      print *,'filter_index ', j, wavelength, bandwidth
+c      filter_index        = j
+      print *,'filter_index ', j, wavelength, bandwidth, uresp, 
+     &     photflam, abmag
+c      stop
 c
       readnoise           = read_noise_cv3(sca_id-480)
       print *,'readnoise ', readnoise
@@ -648,19 +681,36 @@ c
 c     
 c     read zodiacal background
 c
-      call read_jwst_background(zodifile, indx, pixel,
+      call read_jwst_background(zodifile, use_filter, pixel,
      &     mirror_area, background)
 c
       if(scale.eq.0.0317d0.and.wavelength.gt.2.4d0) go to 999
       if(scale.eq.0.0648d0.and.wavelength.lt.2.4d0) go to 999
 c     
-      print 92, sca_id, j, filter_id, scale, wavelength,
-     &     psf_file(j)
+      print 92, sca_id, use_filter, filter_id, scale, wavelength,
+     &     psf_file(use_filter)
  92   format('main:       sca',2x,i3,' filter ',i4,2x,a5,
      &     ' scale',2x,f6.4,' wavelength ',f7.4,
      &     2x,a50)
       PRINT *,'PA_DEGREES ', PA_DEGREES, 'PAUSE'
 c     
+c====================================================================      
+c
+c     If this is a noiseless simulation set
+c     noise values accordingly
+c
+      i          = sca_id - 480
+      if(noiseless .eqv. .true.) then
+         readnoise  = 0.0d0
+         ipc_add    = .false.
+         psf_add    = .true.    ! for now
+         psf_add    = .false.    ! for now
+         ktc(i)            = 0.0d0
+         voltage_offset(i) = 0.0d0
+         dark_mean(i)      = 0.0d0
+         dark_sigma(i)     = 0.0d0
+      end if
+c
 c====================================================================      
 c
 c     NIRCam total number of points in primary dither pattern: 1-25, 27, 36, 45 
@@ -669,7 +719,7 @@ c     Total number of points in subpixel dither pattern (1-64)
       SUBPXPNS  =  subpixel_total
       nresets   = 1
 c
-c     This is the aperture SIAF position for NIRCAALL
+c     This is the SIAF position for the NIRCAALL aperture
 c
       xc        = -0.00529d0
       yc        = -8.209855d0
@@ -870,6 +920,7 @@ c
 c
 c     exposure parameters
 c
+      exposure  = '1234567'
 c     pointing sequence number
       pntg_seq  = idither
 c     running count of exposures in visit
@@ -930,7 +981,6 @@ c     Heliocentric exposure end time in Modified Julian Date format
       hendtime  = expend
 c     Heliocentric exposure mid time in Modified Julian Date format
       hmidtime  = expmid
-
 c     
 c     photometry information
 c
@@ -1094,8 +1144,10 @@ c
 c      if(include_galaxies .eq. 1 .and. ngal .gt. 0) then 
 c
       call read_fake_mag_cat(galaxy_catalogue, cat_filter, 
-     &     filter_in_cat, use_filter, ngal)
-      print *,'nf, use_filter, ngal', filter_in_cat, use_filter, ngal
+     &     filter_in_cat, catalogue_filters_used, ngal)
+      print *,'filters in cat,catalogue_filters_used, use_filter,ngal', 
+     &     filter_in_cat,catalogue_filters_used, use_filter, ngal
+
 c     end if
       if(verbose.ge.2) then
          do i = 1, 10,2
@@ -1104,7 +1156,6 @@ c     end if
             
          end do
       end if
-c      stop
 c
 c=======================================================================
 c
@@ -1171,6 +1222,7 @@ c
      *     (iunit, nx, ny, 
      *     bitpix, naxis, naxes, pcount, gcount, cube_name,
      *     title, pi_name, category, subcat, scicat, cont_id,
+     *     full_date,
      *     date_obs, time_obs, date_end, time_end, obs_id,
      *     visit_id, program_id, observtn, visit, obslabel,
      *     visitgrp, seq_id, act_id, exposure, template,
@@ -1205,9 +1257,11 @@ c
      &     nframes, object, sca_id,
      &     photplam, photflam, stmag, abmag,
      &     naxis1, naxis2,
+     &     noiseless,
      &     include_ktc, include_bg, include_cr, include_dark,
      &     include_latents, include_readnoise, include_non_linear,
-     &     ktc,bias_value, readnoise, background, dhas, verbose)
+     &     ktc(sca_id-480),voltage_offset(sca_id-480),
+     &     readnoise, background, dhas, verbose)
 c
 c=======================================================================
 c
@@ -1257,7 +1311,7 @@ c
      *     subarray, colcornr, rowcornr, naxis1, naxis2,
      *     filter_id, wavelength, bandwidth, system_transmission,
      *     mirror_area, photplam, photflam, stmag, abmag,
-     *     background, icat_f,filter_index, psf_file(indx), 
+     *     background, icat_f,use_filter, psf_file(use_filter), 
      *     over_sampling_rate, noiseless, psf_add,
      *     ipc_add, verbose)
 c

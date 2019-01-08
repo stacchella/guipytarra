@@ -34,7 +34,7 @@ c
      *     bias(nnn,nnn)
 c
       dimension dark_mean(10), dark_sigma(10), gain(10),
-     *     read_noise(10)
+     *     read_noise(10), ktc(10), voltage_offset(10)
 c 
       common /base/ base_image
       common /dark_/ dark_image

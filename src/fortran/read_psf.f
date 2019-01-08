@@ -11,7 +11,7 @@ c
       integer over_sampling_rate, nx, ny, n_psf_x, n_psf_y, i, j, nnn,
      &     det_samp, verbose
       real psf
-      character file*120
+      character file*(*)
       parameter(nnn=2048, nxny=2048*2048)
       dimension psf(2048,2048), dpsf(2048,2048),integrated_psf(nxny)
       common /psf/ integrated_psf,n_psf_x, n_psf_y, 
@@ -19,11 +19,14 @@ c
 c
 c     read PSF as a fits file
 c
+      print *,'read_psf: over_sampling_rate',over_sampling_rate
       call read_psf_fits(file, psf, nx, ny,det_samp, scale, verbose)
       if(det_samp.ne.0) over_sampling_rate = det_samp
 c
+      if(verbose.gt.0) print *,'read_psf: enter resample'
       call resample(nx, ny, psf, over_sampling_rate,
      *     n_psf_x, n_psf_y, dpsf, nnn)
+      if(verbose.gt.0) print *,'read_psf: exit  resample'
 c      nx   = n_psf_x
 c      ny   = n_psf_y
 c      do j = 1, ny
@@ -37,8 +40,10 @@ c     *     n_psf_x, n_psf_y, nx, ny
 c
 c     create the cummulative distribution in a 1-D array
 c
+      if(verbose.gt.0) print *,'read_psf: enter integration'
       call integration(dpsf, n_psf_x, n_psf_y, integrated_psf, nxy,
      &     verbose)
+      if(verbose.gt.0) print *,'read_psf: exit  integration'
 c
       return
       end

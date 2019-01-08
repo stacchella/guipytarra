@@ -38,7 +38,7 @@ c
 
       common / gain_/ gain_image
       common /stars/ ra_stars, dec_stars, mag_stars, nstars
-
+c
       if (verbose .eq.1) then
          print *,'enter add_stars'
       end if

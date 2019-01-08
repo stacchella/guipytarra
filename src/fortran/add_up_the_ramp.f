@@ -13,6 +13,7 @@ c     cnaw 2017-05-01
 c     Steward Observatory, University of Arizona
 c     more changes 
 c     cnaw 2018-02-26
+c     cnaw 2018-06-08
 c
       subroutine add_up_the_ramp(idither, ra_dithered, dec_dithered, 
      *     pa_degrees,
@@ -98,7 +99,7 @@ c
       parameter (nnn=2048, max_nint=3, max_order=7)
 c
       dimension dark_mean(10), dark_sigma(10), gain(10),
-     *     read_noise(10),  even_odd(8)
+     *     read_noise(10), even_odd(8), ktc(10), voltage_offset(10)
 c
 c     images
 c
@@ -190,8 +191,8 @@ c     Read PSF
 c
 c      print 1130, psf_file
       if(verbose.gt.1) then
-         PRINT *,'SCA_IMAGE:', sca_id, ra_dithered, dec_dithered, 
-     *        x_sca, y_sca, ra_sca, dec_sca
+         PRINT *,'SCA_IMAGE:', sca_id, ra_dithered, dec_dithered
+c     *        x_sca, y_sca, ra_sca, dec_sca
          print 1130, psf_file
       end if
       print 1130, psf_file
@@ -215,9 +216,9 @@ c
 c     Loop through nints
 c
       do nint_level = 1, nints
+c
 c     Loop through the number of groups
 c
-
          do k = 1, ngroups
             if(verbose.ge.1) then
                print 1140,idither, nint_level,k, ngroups,nframe,nskip
@@ -266,14 +267,17 @@ c
 c     add galaxies
 c     [e-]
                if(include_galaxies .eq. 1 .and. ngal .gt. 0) then
-                  if(verbose.ge.2)print *, 'sca_image: add_galaxies',
-     *                 wavelength, bandwidth, system_transmission
+                  if(verbose.ge.2)then 
+                     print *, 'add_up_the_ramp: add_galaxies: ',
+     &                    'background, filter_index, abmag'
+                     print *, background, filter_index, abmag
+                  end if
                   call add_modelled_galaxy(sca_id,
      *                 ra_dithered, dec_dithered, pa_degrees,
-     *                 xc, yc, osim_scale, icat_f,
+     *                 xc, yc, osim_scale, filter_index,
      *                 ngal, scale,
      *                 wavelength, bandwidth, system_transmission, 
-     *                 mirror_area, tframe, seed, in_field,
+     *                 mirror_area, abmag, tframe, seed, in_field,
      &                 noiseless, psf_add, ipc_add,verbose)
                   if(verbose.ge.2) then
                      print *, 'sca_image: added', in_field,
@@ -345,7 +349,9 @@ c
                   call add_read_noise(brain_dead_test,read_noise, 
      *                 subarray,colcornr, rowcornr, naxis1, naxis2)
                end if
+c     [e-]
                if(include_1_over_f.eq.1) then
+                  level = (k-1)*(nskip+nframe) + loop
 c     write(noise_name,900) sca_id
 c     900              format('ng_hxrg_noise_',i3,'.fits')
                   call add_one_over_f_noise(noise_name, level,
@@ -376,10 +382,12 @@ c
                   end do
                end if
 c     
-c     add baseline noise [ADU]
+c     add baseline noise [ADU] if 1/f noise is not used
 c     
-               call add_baseline(
-     &              subarray,colcornr, rowcornr, naxis1, naxis2)
+               if(include_1_over_f.ne.1) then
+                  call add_baseline(
+     &                 subarray,colcornr, rowcornr, naxis1, naxis2)
+               end if
 c     
 c     write to data cube
 c     

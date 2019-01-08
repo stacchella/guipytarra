@@ -8,7 +8,7 @@ c
       real image
       integer unit, status, bitpix, det_samp, nnn, nx, ny, ncol, nrow,
      &     readwrite, verbose
-      character name*20, comment*80
+      character name*20, comment*40
       character filename*120
 c
       parameter (nnn=2048)
